@@ -1,0 +1,396 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+<meta name="HandheldFriendly" content="true" />
+<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />	
+   <!-- Turn off IE Compatibility Mode -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>Cambridge MA Property Search</title>
+	<link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+	<style>
+	
+		
+		 /* reset from  http://codepen.io/bradfrost/full/orKvD */
+		/************Reset**************/
+		* { 
+			-moz-box-sizing: border-box; 
+			-webkit-box-sizing: border-box; 
+			box-sizing: border-box; 
+		}
+		html, body, div, object, iframe, fieldset { 
+			margin: 0; 
+			padding: 0; 
+			border: 0;
+		} 
+		ol, ul { 
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		} 
+		table { 
+			border-collapse: collapse; 
+			border-spacing: 0; 
+		}
+		header, footer, nav, section, article, hgroup, figure {
+			display: block; 
+		}
+		legend {
+			display: none;
+		}
+		/************End Reset**************/
+
+
+		/* responsive design control css, as per http://codepen.io/bradfrost/full/orKvD  - 3 columns */
+		/*
+		.col-group > div {
+		  padding: 1em 1em 0;
+		}
+
+		@media screen and (min-width: 50em) {
+		  .col-group {
+			overflow: hidden;
+		  }
+		  .col-group > div {
+			float: left;
+			width: 33.3333333%;
+		  }
+		}
+		*/
+/* variant on  column drop */
+.c {
+  padding: 1em;
+}
+@media screen and (min-width: 42em) {
+  .main {
+	width: 65%;
+	float: left;
+	padding: 0 1em 0 0;
+  }
+  .sb {
+	float: left;
+	width: 35%;
+  }
+  .sb-2 {
+	clear: both;
+  }
+ 
+
+	.sb .results {
+		/*background-color:#06266F;*/
+		background-color:#919191;
+		padding-left:10px;
+		padding-right:10px;
+		padding-bottom:10px;
+		color: #F8F8F9;
+		border-radius:5px;
+	}
+
+	.sb .results_title {
+		color: #E6E6E6;	
+	}   
+
+}
+@media screen and (min-width: 62em) {
+  .main {
+	width: 35%;
+	margin-left: 35%;
+	padding: 0 1em;
+  }
+  .sb {
+	margin-left: -70%;
+  }
+  .sb .results {
+	float:right;
+  }
+  .sb-2 {
+	float: right;
+	width: 20%;
+	clear: none;
+	margin-right:10%;
+  }
+}
+	</style>
+	<style type="text/css">
+	    /* IE Don't make my resized images look incredibly awful switch. */
+	    img { -ms-interpolation-mode: bicubic; }
+
+		/* search box autocomplete css */
+		.search_container {
+			width:600px;
+			max-width:100%;  
+		}
+		.search_container_autocomplete {
+			box-shadow:0 1px 7px #999999;
+			background-color: #F8F8F9;
+			width:600px;
+			max-width:100%;  
+			font-size:14px;
+		}
+		
+		/* general */
+		body {
+			background-color: #d9d9d9;
+			font-family:'Ubuntu',sans-serif;
+		}		   
+		
+		/* layout */
+		 #title_bar {
+			overflow: hidden;
+			width: 100%;
+			display: block;
+			box-shadow: 0px 5px 5px #888;
+			background: rgba(255, 255, 255, .65);
+			padding-bottom:10px;
+		 }
+		#title_bar h3,h1 ,#title_bar .search_container, #title_bar .search_container_autocomplete{
+
+			font-weight:bold;
+			margin-left:auto;
+			margin-right:auto;
+			width:600px;
+			max-width:100%;	 
+			padding-left:10px;  
+			padding-right:10px; 
+			text-align:center;	  
+		}
+
+		#title_bar h1 {
+		    color:#FF0000;
+		}
+
+		.results_title {
+			color:#7A7777;
+		}
+		.nearby{
+			font-weight:bold;
+		}
+		.results>div {
+			padding-top:10px;
+		}
+		
+		.results_value {
+			padding-left:10px;
+			font-weight:bold;
+		}
+		.results_link {
+			padding-left:10px;
+			font-weight:bold;
+		}
+		
+		#map img,#streetview img {
+			width:350px;
+			max-width:100%;
+		}		
+
+		
+		.results {
+			display:none;
+		}
+
+		#search_indicator {
+			display: none;
+			text-align: center;
+			padding-top: 30px;
+			position: absolute;
+			width: 100%;
+		}
+
+		#dashboardMapImage {
+			height: 220px;
+			/*width: 300px;*/
+		}
+
+	</style>
+	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css"></link>	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.js"></script>
+	<script src='js/jsrender.js'></script>
+	<script src="js/proj4js/lib/proj4js-compressed.js"></script>
+	<script src="js/propsearch.js"></script>
+	<script>
+	$.views.helpers({
+		"lowerCaseNoSpaces": function( val ) {
+		    return val.toLowerCase().replace(/ /g,'');
+		}
+	});
+	$.templates({
+		"historic_info_template": "<a target='_blank' href='http://www2.cambridgema.gov/historic/{{>~lowerCaseNoSpaces(value)}}home.html'>{{>value}} {{>type}}</a>",
+		"protected_info_template": "<a target='_blank' href='http://www2.cambridgema.gov/historic/index.html'>{{>value}} {{>type}}</a>",
+		"census_info_template": "<a target='_blank' href='http://factfinder2.census.gov/bkmk/table/1.0/en/ACS/11_5YR/DP05/1400000US25017{{>value}}'>{{>value}}</a>",
+		"nhood_info_template": "<a target='_blank' href='http://www.cambridgema.gov/CDD/planud/neighplan/neighs/{{>value}}'>{{>name}}</a>"
+	});
+	</script>
+</head>
+<body>
+	<div id="title_bar">
+	    <a href="http://www.cambridgema.gov" target="_blank"><img src="http://gis.cambridgema.gov/images/City_Seal_Transparent.png" style="height:138px; float:left; border:0" /></a>
+		<h1>myCambridge</h1>
+		<h3>City of Cambridge Search By Address Tool</h3>
+		<div class='search_container '>
+			<input placeholder="Enter an Address" type='text' class='search_container_autocomplete'>
+		</div>
+
+	</div>
+	<div id="search_indicator">
+		<img src="images/ajax-loader.gif" /><br/>
+		searching...
+	</div>
+	<div class="col-group c">
+		<div class="main" id="col1">
+			<div class="results">
+				<div id="addr_db">
+					<div class="results_title">Addresses from Address Database</div>
+					<div class="results_value"></div>
+				</div>
+				
+				<div id="addr_assessing">
+					<div class="results_title">Addresses from Assessing Records</div>
+					<div class="results_value"></div>
+					<div class="results_link">
+						<a href="#" id="assessing_more_data">See more Data</a>
+					</div>
+					<div style="display:none">
+						<form id="assessing_search_form" target="_blank" action="http://www2.cambridgema.gov/fiscalaffairs/DoPropSearch.cfm" method="post">
+							<input name="blockNumber" value="" />
+							<input name="lotNumber" value="" />
+							<input name="Search" value="Search" />
+						</form>
+					</div>
+				</div>
+				
+				<div id="poi">
+					<div class="results_title">Found At This Address</div>
+					<div class="results_value"></div>
+				</div>
+				
+				<div id="neighborhood">
+					<div class="results_title">Neighborhood</div>
+					<div class="results_value"></div>
+				</div>   
+			   
+			   
+				<div id="hist_info">
+					<div class="results_title">Historic Info</div>
+					<div class="results_value"></div>
+				</div>
+			   
+				<div id="trash_day">
+					<div class="results_title">Trash & Recycling Pick Up Day</div>
+					<div class="results_value"></div>
+				</div>
+
+				<div id="st_sweep_dist">
+					<div class="results_title">Street Sweeping District</div> 
+					<div class="results_value"></div>
+					<div class="results_link">
+						<a href="http://www.cambridgema.gov/TheWorks/OurServices/StreetCleaning/SchedulesAndRoutes.aspx" target="_blank">See schedule for details</a>
+					</div>
+				</div>
+				
+				<div id="elect_info">
+					<div class="results_title">Elected Officials and Voting Info</div>
+					<div class="results_value">
+						<span id="ward"></span>
+						<br/>
+						<span id="vote"></span>
+						<br/>
+						<span id="st_rep"></span>
+						<br/>
+						<span id="st_sen"></span>
+						<br/>
+						<span id="us_rep"></span>
+				  </div>
+				</div>
+				   
+				<div id="census_info">
+					<div class="results_title">U.S. Census Info</div>
+					<div class="results_value"></div>
+				</div>
+				<div id="zip_code">
+					<div class="results_title">Zip Code</div>
+					<div class="results_value"></div>
+				</div>
+				
+				
+			</div>
+		</div>
+		<div class="sb" id="col2">
+
+			<div class="results">
+				<div id="map">
+					<a href="#">
+						<img src="" alt="" style="border:0" />
+					</a>
+				</div>
+				<div id="streetview">
+					<a href="#">
+						<img src="" alt="" style="border:0" />
+					</a>
+				</div>
+
+				<div id="latlon_coordinates">
+					<div class="results_title">Lat/Lon</div>
+					<div class="results_value">###</div>
+				</div>
+				<div id="sp_ft_coordinates">
+					<div class="results_title">State Plane NAD 83 Ft</div>
+					<div class="results_value">####</div>
+				</div>
+				<div id="sp_m_coordinates">
+					<div class="results_title">State Plane NAD 83 Meters</div>
+					<div class="results_value">####</div>
+				</div>
+				<div id="utm_coordinates">
+					<div class="results_title">UTM Zone 19N</div>
+					<div class="results_value">####</div>
+				</div>
+			</div>
+		</div>
+		<div class="sb-2" id="col3">
+			<div class="results">
+				<div>
+					<img id="dashboardMapImage" src="images/AddressDashboardMap_small.png" />
+				</div>
+				<div>
+					For more information about Cambridge GIS maps and interactive viewers, please visit: <a href="http://www.cambridgema.gov/GIS" target="_blank">www.cambridgema.gov/GIS</a>
+				</div>
+			</div>
+		</div>
+		<div class="sb-2" id="col3_disabled" style="display: none;">
+			<div class="results">
+				<div class="results_title nearby">Nearby</div>
+				<div id="city_squares">
+					<div class="results_title">City Squares</div>
+					<div class="results_value">Central Square</div>
+				</div>
+				
+				<div id="comm_dist">
+					<div class="results_title">Commercial Districts</div>
+					<div class="results_value">Central Square</div>
+				</div>
+				
+				<div id="parks">
+					<div class="results_title">Parks</div>
+					<div class="results_value">Cooper Park <br />Other Park</div>
+				</div>	
+				
+				<div id="hospitals">
+					<div class="results_title">Closest Hospital or Health Clinic</div>
+					<div class="results_value">Youville Hospital <a href="http://www.google.com">Info</a></div>
+				</div>
+				
+				<div id="muni_svc">
+					<div class="results_title">Municipal Services</div>
+					<div class="results_value">Library : Central Square Library <br />Youth Center: Area IV Youth Center</div>
+				</div>
+				
+				<div id="trans">
+					<div class="results_title">Transportation</div>
+					<div class="results_value">MBTA Station: Central Square <br />Bus Stops: Mass Ave (66,77)</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
