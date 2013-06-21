@@ -118,14 +118,19 @@
 		/* search box autocomplete css */
 		.search_container {
 			width:600px;
-			max-width:100%;  
+			max-width:100%;
 		}
 		.search_container_autocomplete {
 			box-shadow:0 1px 7px #999999;
 			background-color: #F8F8F9;
+			font-weight:bold;
+			margin-left:auto;
+			margin-right:auto;
 			width:600px;
-			max-width:100%;  
-			font-size:14px;
+			max-width: 90%;
+			padding-left:10px;
+			padding-right:10px;
+			text-align:center;
 		}
 		
 		/* general */
@@ -143,16 +148,16 @@
 			background: rgba(255, 255, 255, .65);
 			padding-bottom:10px;
 		 }
-		#title_bar h3,h1 ,#title_bar .search_container, #title_bar .search_container_autocomplete{
+		#title_bar h3,h1 ,#title_bar .search_container{
 
 			font-weight:bold;
 			margin-left:auto;
 			margin-right:auto;
 			width:600px;
-			max-width:100%;	 
-			padding-left:10px;  
-			padding-right:10px; 
-			text-align:center;	  
+			max-width:100%;
+			padding-left:10px;
+			padding-right:10px;
+			text-align:center;
 		}
 
 		#title_bar h1 {
@@ -202,10 +207,11 @@
 		}
 
 	</style>
-	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css"></link>	
+	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-placeholder/2.0.7/jquery.placeholder.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.ba-bbq/1.2.1/jquery.ba-bbq.min.js"></script>
 	<script src='js/jsrender.js'></script>
 	<script src="js/proj4js-compressed.js"></script>
 	<script src="js/propsearch.js"></script>
@@ -233,8 +239,25 @@
 	    <a href="http://www.cambridgema.gov" target="_blank"><img src="http://gis.cambridgema.gov/images/City_Seal_Transparent.png" style="height:138px; float:left; border:0" /></a>
 		<h1>myCambridge</h1>
 		<h3>City of Cambridge Search By Address Tool</h3>
-		<div class='search_container '>
+		<div class='search_container'>
 			<input placeholder="Enter an Address" type='text' class='search_container_autocomplete'>
+			<img id="permalink_image" title="Click here to show a Permalink to this search" src="images/permalink_icon.png" style="vertical-align: middle" />
+			<style>
+			.ui-dialog .ui-dialog-content {
+				padding: 0;
+			}
+			.ui-dialog .ui-dialog-titlebar {
+				padding: 0;
+				margin: 0;
+			}
+			.ui-dialog .ui-dialog-title {
+				padding: 0;
+				margin: 0;
+			}
+			</style>
+			<div id="permalink_dialog" title="Permalink URL" style="display:none">
+				<input value="" id="permalink_txt" style="margin-top: 5px; width: 100%;border: 1px solid black" />
+			</div>
 		</div>
 
 	</div>
