@@ -245,8 +245,10 @@ CAMBRIDGEMA.dashboardPlugins = {
 				"success" : function(results) {
 					if (results.features.length === 0) {
 						$('#poi .results_value').html("No Points of Interest Found");
+						$('#poi').css('display','none');
 						return;
 					}
+					$('#poi').css('display','block');
 					var pois = [];
 					$.each(results.features, function(idx, feature) {	
 						pois.push(feature.attributes.poi_name);
@@ -332,9 +334,9 @@ CAMBRIDGEMA.dashboardPlugins = {
 						res.push({ "value" : feature.attributes.NAME, "type" : "(Historic District)"});
 					});
 					if (!$.render.historic_info_template) {
-						$('#hist_info .results_value').html(res.join("<br/>"));
+						$('#hist_info .results_value').append(res.join("<br/>"));
 					} else {
-						$('#hist_info .results_value').html($.render.historic_info_template( res ));
+						$('#hist_info .results_value').append($.render.historic_info_template( res ));
 					}
 				}
 			}));
@@ -352,9 +354,9 @@ CAMBRIDGEMA.dashboardPlugins = {
 						res.push({ "value" : feature.attributes.NAME, "type" : "(Conservation District)"});
 					});
 					if (!$.render.historic_info_template) {
-						$('#hist_info .results_value').html(res.join("<br/>"));
+						$('#hist_info .results_value').append(res.join("<br/>"));
 					} else {
-						$('#hist_info .results_value').html($.render.historic_info_template( res ));
+						$('#hist_info .results_value').append($.render.historic_info_template( res ));
 					}
 				}
 			}));
@@ -372,15 +374,22 @@ CAMBRIDGEMA.dashboardPlugins = {
 						res.push({ "value" : feature.attributes.HISTORIC_N, "type" : "(Protected Property)"});
 					});
 					if (!$.render.protected_info_template) {
-						$('#hist_info .results_value').html(res.join("<br/>"));
+						$('#hist_info .results_value').append(res.join("<br/>"));
 					} else {
-						$('#hist_info .results_value').html($.render.protected_info_template( res ));
+						$('#hist_info .results_value').append($.render.protected_info_template( res ));
 					}
 				}
 			}));
 
 			var def = $.Deferred();
-			$.when.apply(this,queries).then(function () {
+			$.when.apply(this,queries).then(function (q1, q2, q3) {
+				if ((!q1[0] || !q1[0].features || q1[0].features.length === 0) &&
+					(!q2[0] || !q2[0].features || q2[0].features.length === 0) &&
+					(!q3[0] || !q3[0].features || q3[0].features.length === 0))
+				{
+					// no historic district results
+					$('#hist_info .results_value').html("This property is not in a Historic District");
+				}
 				def.resolve();
 			});
 			return def;
