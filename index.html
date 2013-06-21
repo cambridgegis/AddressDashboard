@@ -205,6 +205,7 @@
 	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css"></link>	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-placeholder/2.0.7/jquery.placeholder.min.js"></script>
 	<script src='js/jsrender.js'></script>
 	<script src="js/proj4js-compressed.js"></script>
 	<script src="js/propsearch.js"></script>
@@ -220,6 +221,11 @@
 		"census_info_template": "<a target='_blank' href='http://factfinder2.census.gov/bkmk/table/1.0/en/ACS/11_5YR/DP05/1400000US25017{{>value}}'>{{>value}}</a>",
 		"nhood_info_template": "<a target='_blank' href='http://www.cambridgema.gov/CDD/planud/neighplan/neighs/{{>value}}'>{{>name}}</a>"
 	});
+	$(document).ready(
+		function() {
+			$('input, textarea').placeholder();
+		}
+	);
 	</script>
 </head>
 <body>
