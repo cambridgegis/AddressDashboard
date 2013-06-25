@@ -374,6 +374,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 		render: function(results) {
 			var res = [];
 			var queries = [];
+			$('#hist_info .results_value').html('');
 			queries.push(CAMBRIDGEMA.execPointQuery({
 				"resourceId" : 4,
 				"x" : results.geometry.x,
