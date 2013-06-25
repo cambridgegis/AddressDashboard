@@ -457,7 +457,11 @@ CAMBRIDGEMA.dashboardPlugins = {
 				"y" : results.geometry.y,
 				"success" : function(results) {
 					$('#elect_info #ward').html("Ward " + results.features[0].attributes.Ward + ", Precinct " + results.features[0].attributes.Precinct);
-					$('#elect_info #vote').html("Voting Location: " + results.features[0].attributes.Location + "(" + results.features[0].attributes.Location_Note + ")");
+					if (results.features[0].attributes.Location_Note != ' ') {
+						$('#elect_info #vote').html("Voting Location: " + results.features[0].attributes.Location + " (" + results.features[0].attributes.Location_Note + ")");
+					} else {
+						$('#elect_info #vote').html("Voting Location: " + results.features[0].attributes.Location);
+					}
 				}
 			}));
 
