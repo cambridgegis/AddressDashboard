@@ -162,6 +162,13 @@ jQuery(document).ready(function () {
 				"dataType":"jsonp",
 				"data" : data,
 				"success" :function (data) {
+					data.features.sort(function(obj1, obj2) {
+						if (obj1.attributes.StName.toUpperCase() == obj2.attributes.StName.toUpperCase()) {
+							return parseInt(obj1.attributes.StNm) - parseInt(obj2.attributes.StNm);
+						} else {
+							return (obj1.attributes.StName.toUpperCase() > obj2.attributes.StName.toUpperCase() ? 1 : -1);
+						}
+					});
 					response ( $.map (data.features, function (item) {
 						return {
 							label: item.attributes.Full_Addr,
