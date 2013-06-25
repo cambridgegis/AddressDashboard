@@ -148,12 +148,12 @@ jQuery(document).ready(function () {
 				var aSearchTree = CAMBRIDGEMA.generateSearchTree(aTerms);
 				var aQueries = [];
 				for (var i = 0; i < aSearchTree.length; i++) {
-					aQueries.push("( Full_Addr like '%" + aSearchTree[i].join("%") + "%')");
+					aQueries.push("( Search_Addr like '%" + aSearchTree[i].join("%") + "%')");
 				}
 				data.where = aQueries.join(" OR ");
 				//console.log(data.where);
 			} else {
-				data.where = "Full_Addr like '%"+request.term+"%'";
+				data.where = "Search_Addr like '%"+request.term+"%'";
 			}
 		
 			jQuery.ajax({
