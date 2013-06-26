@@ -237,7 +237,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 		render: function(results) {
 			var BldgID = results.attributes.BldgID;  // Store for later URL creation
 			return CAMBRIDGEMA.execSimpleQuery({
-				"resourceId" : 12,
+				"resourceId" : 13,
 				"query" : "BldgID = '" + results.attributes.BldgID + "'",
 				"outFields" : "address_id",
 				"success" : function(results) {
@@ -250,7 +250,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 						aFeatureIds.push(oFeature.attributes.address_id);
 					});
 					CAMBRIDGEMA.execSimpleQuery({
-						"resourceId" : 11,
+						"resourceId" : 12,
 						"query" : "address_id in ('" + aFeatureIds.join("','") + "')",
 						"success" : function(results) {
 							if (results.features.length === 0) {
@@ -272,7 +272,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 	"addresses_from_vision" : {
 		render: function(results) {
 			return CAMBRIDGEMA.execSimpleQuery({
-				"resourceId" : 14,
+				"resourceId" : 15,
 				"query" : "GIS_ID = '" + results.attributes.ml + "'",
 				"success" : function(results) {
 					if (results.features.length === 0) {
@@ -300,7 +300,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 	"points_of_interest" : {
 		render: function(results) {
 			return CAMBRIDGEMA.execSimpleQuery({
-				"resourceId" : 13,
+				"resourceId" : 14,
 				"query" : "address_id = '" + results.attributes.address_id + "'",
 				"success" : function(results) {
 					if (results.features.length === 0) {
@@ -321,7 +321,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 	"neighborhood_trashday_streetsweeping_zipcode" : {
 		render: function(results) {
 			return CAMBRIDGEMA.execSimpleQuery({
-				"resourceId" : 11,
+				"resourceId" : 12,
 				"query" : "address_id = '" + results.attributes.address_id + "'",
 				"success" : function(results) {
 					var res = [];
@@ -383,7 +383,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 			var queries = [];
 			$('#hist_info .results_value').html('');
 			queries.push(CAMBRIDGEMA.execPointQuery({
-				"resourceId" : 4,
+				"resourceId" : 5,
 				"x" : results.geometry.x,
 				"y" : results.geometry.y,
 				"success" : function(results) {
@@ -403,7 +403,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 			}));
 
 			queries.push(CAMBRIDGEMA.execPointQuery({
-				"resourceId" : 3,
+				"resourceId" : 4,
 				"x" : results.geometry.x,
 				"y" : results.geometry.y,
 				"success" : function(results) {
@@ -423,7 +423,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 			}));
 
 			queries.push(CAMBRIDGEMA.execPointQuery({
-				"resourceId" : 2,
+				"resourceId" : 3,
 				"x" : results.geometry.x,
 				"y" : results.geometry.y,
 				"success" : function(results) {
@@ -460,7 +460,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 		render: function(results) {
 			var queries = [];
 			queries.push(CAMBRIDGEMA.execPointQuery({
-				"resourceId" : 6,
+				"resourceId" : 7,
 				"x" : results.geometry.x,
 				"y" : results.geometry.y,
 				"success" : function(results) {
@@ -474,7 +474,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 			}));
 
 			queries.push(CAMBRIDGEMA.execPointQuery({
-				"resourceId" : 7,
+				"resourceId" : 8,
 				"x" : results.geometry.x,
 				"y" : results.geometry.y,
 				"success" : function(results) {
@@ -483,7 +483,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 			}));
 
 			queries.push(CAMBRIDGEMA.execPointQuery({
-				"resourceId" : 8,
+				"resourceId" : 9,
 				"x" : results.geometry.x,
 				"y" : results.geometry.y,
 				"success" : function(results) {
@@ -496,7 +496,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 			}));
 
 			queries.push(CAMBRIDGEMA.execPointQuery({
-				"resourceId" : 9,
+				"resourceId" : 10,
 				"x" : results.geometry.x,
 				"y" : results.geometry.y,
 				"success" : function(results) {
@@ -515,7 +515,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 		render: function(results) {
 			var res = [];
 			return CAMBRIDGEMA.execPointQuery({
-				"resourceId" : 10,
+				"resourceId" : 11,
 				"x" : results.geometry.x,
 				"y" : results.geometry.y,
 				"success" : function(results) {
