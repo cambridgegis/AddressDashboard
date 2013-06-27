@@ -412,7 +412,11 @@ CAMBRIDGEMA.dashboardPlugins = {
 						return;
 					}
 					$.each(results.features, function(idx, feature) {
-						res.push({ "value" : feature.attributes.NAME, "type" : "(Conservation District)"});
+							if (feature.attributes.NAME === 'Hf Crown-Marsh' ) {
+								res.push({ "value" : feature.attributes.NAME, "type" : "(Conservation District)", "url" : "http://www2.cambridgema.gov/historic/halfcrown_marsh_home.html"});
+							} else {
+								res.push({ "value" : feature.attributes.NAME, "type" : "(Conservation District)", "url" : "http://www2.cambridgema.gov/historic/" + feature.attributes.NAME.toLowerCase().replace(/ /g,'') + "home.html"});
+							}
 					});
 					if (!$.render.historic_info_template) {
 						$('#hist_info .results_value').append(res.join("<br/>"));
