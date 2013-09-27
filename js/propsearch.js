@@ -108,7 +108,7 @@ jQuery(document).ready(function () {
 			//console.log(data.where);
 		} else {
 */
-			data.where = "Full_Addr like '%"+permalink+"%'";
+			data.where = "Full_Addr like '"+permalink+"'";
 /*
 		}
 */
