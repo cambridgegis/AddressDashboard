@@ -1,0 +1,361 @@
+﻿
+		
+/* reset from  http://codepen.io/bradfrost/full/orKvD */
+/************Reset**************/
+* { 
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box; 
+}
+html, body, div, object, iframe, fieldset, h1, h2, h3, h4, h5, h6 { 
+    margin: 0; 
+    padding: 0; 
+    border: 0;
+} 
+ol, ul { 
+    list-style: none;
+    margin: 0;
+    padding: 0;
+} 
+table { 
+    border-collapse: collapse; 
+    border-spacing: 0; 
+}
+header, footer, nav, section, article, hgroup, figure {
+    display: block; 
+}
+legend {
+    display: none;
+}
+/************End Reset**************/
+
+/* responsive design control css, as per http://codepen.io/bradfrost/full/orKvD  - 3 columns */
+
+/* de facto SINGLE COL/default styles */
+.complete-list {
+	width: 600px;
+	max-width: 300px;
+	max-height: 100%;
+	overflow-y : auto;
+	overflow-x : hidden;
+	padding-right : 20px;
+}
+
+#logo_box h1 {
+    font-size: 24px;
+}
+#GIS_logo img { 
+    border:none;
+    height: 80px;
+    padding: 5px 0 5px 0px;
+    /*margin-left: 10px; */
+}
+#GIS_logo { 
+    float:left;
+    height: 80px; 
+}
+.search_container, .search_container_autocomplete {
+	float:right;
+	width:300px;
+    margin:auto;
+}
+.c {
+    padding: 1em;
+    border: 1px solid #dddbd4;
+    background-color: #ffffff;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1em;
+    width: 90%;
+    margin-bottom: 3em;
+	max-width:945px;
+	min-width:320px;
+}
+#dashboardMapImage {
+        height: 100%;
+        width: 100%;
+        max-height:220px;
+        max-width:297px;
+}
+.search_container h3 { font-size: 14px; }
+
+#city_link_box { 
+	text-align:right;
+	padding:15px 0 0 0;
+	margin:0;
+	font-size: 16px;
+	position:relative;
+}
+#city_link_box a {
+	color: #7493B3;
+	position:absolute;
+	top: 5px;
+	right: 0px;
+}
+
+
+/* rules to create snap positions */ 
+@media screen and (max-width: 744px) {
+    .c { width:320px; }
+    #header_content { width:320px; }
+}
+
+/* 2 Columns */
+@media screen and (min-width: 745px) {
+	/* snap position */
+	.c { width:720px; }
+    #header_content { width:720px; }
+	
+	.main {
+		width: 55%;
+		float: left;
+		padding: 0 1em 0 0;
+	}
+	.sb {
+		float: left;
+		width: 45%;
+	}
+	.sb-2 {
+		clear: both;
+		width:297px;
+	}
+	.sb .results {
+		 /*background-color:#f6f6f6;*/
+		padding-left:10px;
+		padding-right:10px;
+		padding-bottom:10px;
+		color: #F8F8F9;
+		border-radius:5px;
+	}
+	.sb .results_title {
+		color: #8e8e8e;	
+	}
+	.search_container h3 {
+		margin-top: 30px;
+		font-size: 18px;
+	}
+	#GIS_logo img { 
+	border:none;
+	height: 100px;
+	padding:0 0 5px 0; 
+	}
+	#GIS_logo { 
+	float:left;
+	height: 100px; 
+	}
+	#logo_box h1 { font-size: 30px; }
+	.search_container, .search_container_autocomplete {
+		width: 375px;
+	}
+	.complete-list { max-width: 375px; }
+}
+
+
+/* 3 Columns */
+@media screen and (min-width: 970px) {
+    .c { width:945px; }
+    #header_content { width:945px; }
+	
+	.main {
+        width: 35%;
+        margin-left: 35%;
+        padding: 0 1em;
+    }
+    .sb {
+        margin-left: -70%;
+        width: 35%;
+    }
+    .sb .results {
+        float:right;
+        max-width: 100%;
+    }
+    .sb-2 {
+        float: right;
+        width: 30%;
+        clear: none;
+    }
+    .search_container {
+        clear: none;
+        margin-right:7%;
+    }
+    #GIS_logo img {
+        height: 119px;
+        padding-bottom: 0px;
+    }
+    #GIS_logo {
+        height: 128px;
+    }
+    #logo_box h1 {
+        font-size: 36px;
+        padding-left: 7px;
+    }
+    .search_container h3 {
+        font-size: 18px;
+    }
+    .search_container_autocomplete {
+        width: 375px;
+    }
+}
+
+/* IE Don't make my resized images look incredibly awful switch. */
+img { -ms-interpolation-mode: bicubic; }
+		
+/* General */
+body {
+    display:block;
+    background-color: #f2f0e9;
+    font-family:'myriad-pro',sans-serif;
+    background-image:url(../images/background_img.gif);
+    background-repeat:no-repeat;
+    min-width:320px;
+}
+a {
+    text-decoration: none;
+    color:inherit;
+}
+#welcome_text {
+    color: #666666;
+    font-size: 15px;
+    text-align: center;
+}
+/* Header */
+#header_content {
+	margin:0 auto;	
+	padding:0 10px 10px 10px;
+	max-width:945px;
+	min-width:320px;
+}
+#logo_box { 
+    float:left; 
+    /*margin-left: 2%;*/
+}
+
+#cursive_my{
+    color:#797979;
+    font-style: italic;
+    font-family:"adobe-garamond-pro","Times New Roman", Times, serif;
+    font-weight:normal;
+    padding-right: 3px;
+}
+#logo_box h1 {
+    float: right;
+	margin: 8.5% 0 0 10px;
+    color:#1c6f09
+}
+
+.search_container h3 {
+    font-weight:normal;
+    /*margin-top:50px;*/
+    padding-bottom: 5px;
+    color: #666666;
+}
+
+.search_container_autocomplete {
+    /*box-shadow:0 1px 1px #e8e8e8;*/
+    float:right;
+    background-color: #ffffff;
+    background-image:url(../images/search.gif);
+    background-repeat:no-repeat;
+    background-position:right; 
+    color: #666666;
+    margin-left:auto;
+    margin-right:auto;
+    margin-bottom: 5px;
+    /*max-width: 90%;*/
+    padding-left:10px;
+    padding-right:10px;
+    text-align:left;
+    padding:3px;
+    font-size: 11px;
+}
+#title_bar, #title_bar_shadow{
+    overflow:hidden;
+    width:100%;
+    display:block;
+}
+#title_bar {
+    background: #ffffff;
+}
+#title_bar_shadow {
+    background:#beccdc;
+    border-bottom:1px solid #72a2d9;
+    border-top:1px solid #72a2d9;
+    height: 8px;
+}
+
+/* Results Page */
+.results_group_name {
+    color: #297338;
+    font-size:14.5px;
+    font-weight: bold;
+    border-top:1px solid #297338;
+    max-width: 95%;
+    padding-top:10px;
+}
+.results_title {
+    color:#7A7777;
+    margin-top:10px;
+    font-size: 16px;
+}
+.nearby{
+    font-weight:bold;
+}
+.results>div {
+    padding-top:10px;
+}	
+.results_value {
+    /*padding-left:10px;*/
+    font-weight:bold;
+    color:#00345b;
+    font-size: 18px;
+}
+.results a, .results_value a, .results_link {
+    color: #7493b3;
+}
+.results_value a, .results_link {
+    font-weight:bold;
+}
+.results_link {
+    padding-left:10px;
+    font-size: 13px;
+}
+#location_info_background {
+    background-color: #f6f6f6;
+    padding: 10px;
+    padding-top: 20px;
+    padding-bottom: 100px;
+}
+#addr_db .results_value a {
+    font-size: 14px;
+}
+#map img,#streetview img {
+    width:350px;
+    max-width:100%;
+}			
+.results {
+    display:none;
+}
+
+#search_indicator {
+    display: none;
+    text-align: center;
+    padding-top: 30px;
+    position: absolute;
+    width: 100%;
+}
+
+.ui-dialog .ui-dialog-content {
+	padding: 0;
+}
+.ui-dialog .ui-dialog-titlebar {
+	padding: 0;
+	margin: 0;
+}
+.ui-dialog .ui-dialog-title {
+	padding: 0;
+	margin: 0;
+}
+
+
+
+

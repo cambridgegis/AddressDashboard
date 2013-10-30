@@ -1,16 +1,16 @@
 var CAMBRIDGEMA = {};
 
 var streetSweepLookup = {
-	'A': '<b>Odd-side - 1st Wed<br />Even-side - 1st Thur</b>',
-	'B': '<b>Odd-side - 1st Mon<br />Even-side - 1st Tue</b>',
-	'C': '<b>Odd-side - 1st Fri<br />Even-side - 2nd Mon</b>',
-	'D': '<b>Odd-side - 2nd Tue<br />Even-side - 2nd Wed</b>',
-	'E': '<b>Odd-side - 2nd Thur<br />Even-side - 2nd Fri</b>',
-	'F': '<b>Odd-side - 3rd Mon<br />Even-side - 3rd Tue</b>',
-	'G': '<b>Odd-side - 3rd Wed<br />Even-side - 3rd Thur</b>',
-	'H': '<b>Odd-side - 3rd Fri<br />Even-side - 4th Mon</b>',
-	'J': '<b>Odd-side - 4th Tue<br />Even-side - 4th Wed</b>',
-	'K': '<b>Odd-side - 4th Thur<br />Even-side - 4th Fri</b>'
+	'A': 'Odd-side - 1st Wed<br />Even-side - 1st Thur',
+	'B': 'Odd-side - 1st Mon<br />Even-side - 1st Tue',
+	'C': 'Odd-side - 1st Fri<br />Even-side - 2nd Mon',
+	'D': 'Odd-side - 2nd Tue<br />Even-side - 2nd Wed',
+	'E': 'Odd-side - 2nd Thur<br />Even-side - 2nd Fri',
+	'F': 'Odd-side - 3rd Mon<br />Even-side - 3rd Tue',
+	'G': 'Odd-side - 3rd Wed<br />Even-side - 3rd Thur',
+	'H': 'Odd-side - 3rd Fri<br />Even-side - 4th Mon',
+	'J': 'Odd-side - 4th Tue<br />Even-side - 4th Wed',
+	'K': 'Odd-side - 4th Thur<br />Even-side - 4th Fri'
 };
 
 var nhoodLookup = {
@@ -28,6 +28,11 @@ var nhoodLookup = {
 	'Wellington-Harrington': '3',
 	'West Cambridge': '10'
 };
+
+function toTitleCase(str)
+{
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
 
 CAMBRIDGEMA.config = {
 	"queryBaseURL" : "http://gis.cambridgema.gov/ArcGIS/rest/services/AddressDashboard/",
@@ -88,7 +93,6 @@ CAMBRIDGEMA.epsg4326 = new Proj4js.Proj('EPSG:4326');
 CAMBRIDGEMA.epsg26986 = new Proj4js.Proj('EPSG:26986');
 CAMBRIDGEMA.epsg2960 = new Proj4js.Proj('EPSG:2960');
 jQuery(document).ready(function () {
-
 	var permalink = $.bbq.getState("d");
 	if (permalink) {
 		var data = {
@@ -128,14 +132,7 @@ jQuery(document).ready(function () {
 		.autocomplete({
 		"minLength" : 2,
 		"open": function(event, ui) {
-			$(this).autocomplete("widget").css({
-				"width": "600px",
-				"max-width": "100%",
-				"max-height": "100%",
-				"overflow-y" : "auto",
-				"overflow-x" : "hidden",
-				"padding-right" : "20px"
-			});
+			$(this).autocomplete("widget").addClass("complete-list");
 		},
 		"source" : function (request,response) {
 			var data = {
@@ -216,7 +213,8 @@ jQuery(document).ready(function () {
 
 CAMBRIDGEMA.drawResult = function(data) {
 	var plugins = [];
-	$.each(CAMBRIDGEMA.dashboardPlugins, function(idx, plugin) {
+	$("#welcome_text").hide();
+	$.each(CAMBRIDGEMA.dashboardPlugins, function (idx, plugin) {
 		plugins.push(plugin.render(data));
 	});
 
@@ -262,7 +260,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 								addrs.push(feature.attributes.address);
 							});
 							$('#addr_db .results_value').html(addrs.join("<br/>") + 
-															  "<br/><a href='http://gis.cambridgema.gov/map/viewer.aspx?action=select&proximity=0ft&application=address&targetlayer=Buildings&maptab=Address&targetIDs=" + BldgID + "' target='_blank'>Address CityViewer</a>");
+															  "<br/><a href='http://gis.cambridgema.gov/map/viewer.aspx?action=select&proximity=0ft&application=address&targetlayer=Buildings&maptab=Address&targetIDs=" + BldgID + "' target='_blank'>CityViewer Address Map</a>");
 						}
 					});
 				}
@@ -281,18 +279,15 @@ CAMBRIDGEMA.dashboardPlugins = {
 					}
 					var addrs = [];
 					$.each(results.features, function(idx, feature) {	
-						addrs.push(feature.attributes.address);
+							addrs.push(toTitleCase(feature.attributes.address));
 					});
 					$('#addr_assessing .results_value').html(addrs.join("<br/>"));
 
-					$('#assessing_more_data').unbind();
-					$('#assessing_more_data').on('click',function() {
-						var blocknum = results.features[0].attributes.GIS_ID.split('-')[0];
-						var lotnum = results.features[0].attributes.GIS_ID.split('-')[1];
-						$('#assessing_search_form input[name=blockNumber]').val(blocknum);
-						$('#assessing_search_form input[name=lotNumber]').val(lotnum);
-						$('#assessing_search_form').submit();
-					});
+					var res = [];
+					if ($.render.assess_info_template) {
+						res.push({"blocknum":results.features[0].attributes.GIS_ID.split('-')[0], "lotnum":results.features[0].attributes.GIS_ID.split('-')[1]});
+						$('#addr_assessing .results_link').html($.render.assess_info_template(res));
+					}
 				}
 			});
 		}
@@ -335,7 +330,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 						res.push({ "value" : nhoodLookup[results.features[0].attributes.NBHD], "name" : results.features[0].attributes.NBHD });
 						$('#neighborhood .results_value').html($.render.nhood_info_template( res ));
 					}
-					$('#trash_day .results_value').html(results.features[0].attributes.TrashDay);
+					$('#trash_day .results_value').html(toTitleCase(results.features[0].attributes.TrashDay));
 					var sweepText = '';
 					var sweepDist = 'None';
 					// For blank, null, or 'NA' values show 'None'
