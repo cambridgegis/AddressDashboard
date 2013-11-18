@@ -28,7 +28,10 @@
 	$.templates({
 		"historic_info_template": "<a target='_blank' href='{{>url}}'>{{>value}} {{>type}}</a><br/>",
 		"protected_info_template": "<a target='_blank' href='http://www2.cambridgema.gov/historic/index.html'>{{>value}} {{>type}}</a><br/>",
-		"census_info_template": "<a target='_blank' href='http://factfinder2.census.gov/bkmk/table/1.0/en/ACS/11_5YR/DP05/1400000US25017{{>value}}'>{{>value}}</a><br/>",
+		"census_info_template": "<a target='_blank' href='http://factfinder2.census.gov/bkmk/table/1.0/en/ACS/11_5YR/DP05/1400000US25017{{>value}}'>Demographic and Housing Estimates</a><br/>" +
+	                            "<a target='_blank' href='http://factfinder2.census.gov/bkmk/table/1.0/en/ACS/11_5YR/DP02/1400000US25017{{>value}}'>Socal Characteristics</a><br/>" +
+	                            "<a target='_blank' href='http://factfinder2.census.gov/bkmk/table/1.0/en/ACS/11_5YR/DP03/1400000US25017{{>value}}'>Economic Characteristics</a><br/>" +
+                                "<a target='_blank' href='http://factfinder2.census.gov/bkmk/table/1.0/en/ACS/11_5YR/DP04/1400000US25017{{>value}}'>Housing Characteristics</a><br/>",
 		"nhood_info_template": "<a target='_blank' href='http://www.cambridgema.gov/CDD/planud/neighplan/neighs/{{>value}}'>{{>name}}</a><br/>",
 	    "assess_info_template": "<a target='_blank' href='http://www.cambridgema.gov/assess/PropertyDatabase/{{>blocknum}}-{{>lotnum}}'>See more data</a><br/>"
 	});
@@ -138,6 +141,7 @@
 				<div id="census_info">
 					<div class="results_title">U.S. Census Info</div>
 					<div class="results_value"></div>
+					<div class="results_link"></div>
 				</div>
 				<div id="zip_code">
 					<div class="results_title">Zip Code</div>

@@ -525,10 +525,10 @@ CAMBRIDGEMA.dashboardPlugins = {
 					$.each(results.features, function(idx, feature) {	
 						res.push({ "value" : results.features[0].attributes.TRACTCE10 });
 					});
-					if (!$.render.census_info_template) {
-						$('#census_info .results_value').html("Census Tract: " + res[0].value);
-					} else {
-						$('#census_info .results_value').html("Census Tract: " + $.render.census_info_template( res ));
+					$('#census_info .results_value').html("Census Tract: " + res[0].value + "<br/>");
+
+					if ($.render.census_info_template) {
+						$('#census_info .results_link').html($.render.census_info_template( res ));
 					}
 				}
 			});
