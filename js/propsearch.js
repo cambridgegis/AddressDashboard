@@ -130,6 +130,7 @@ jQuery(document).ready(function () {
 
 	$('.search_container_autocomplete')
 		.autocomplete({
+		"autoFocus" : true,
 		"minLength" : 2,
 		"open": function(event, ui) {
 			$(this).autocomplete("widget").addClass("complete-list");
