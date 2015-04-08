@@ -13,9 +13,14 @@ html, body, div, object, iframe, fieldset, h1, h2, h3, h4, h5, h6 {
     border: 0;
 } 
 ol, ul { 
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    padding:10px;
+    text-align:center;
+    color: #8e8e8e;
+    font-size:18px;
+    list-style-type: none;
+}
+li {
+    padding-top: 4px;
 } 
 table { 
     border-collapse: collapse; 
@@ -32,6 +37,7 @@ legend {
 /* responsive design control css, as per http://codepen.io/bradfrost/full/orKvD  - 3 columns */
 
 /* de facto SINGLE COL/default styles */
+
 .complete-list {
 	width: 600px;
 	max-width: 300px;
@@ -39,6 +45,7 @@ legend {
 	overflow-y : auto;
 	overflow-x : hidden;
 	padding-right : 20px;
+    text-align: left
 }
 
 #logo_box h1 {
@@ -103,7 +110,7 @@ legend {
 /* 2 Columns */
 @media screen and (min-width: 745px) {
 	/* snap position */
-	.c { width:720px; }
+    .c { width:720px; }
     #header_content { width:720px; }
 	
 	.main {
@@ -215,8 +222,17 @@ a {
 }
 #welcome_text {
     color: #666666;
-    font-size: 15px;
+    font-size: 13px;
     text-align: center;
+}
+#discover_text {
+    font-weight: bold;
+    font-size: 21px;
+    color: #1c6f09;
+}
+#getting_started {
+    font-size: 17px;
+    color: #1c6f09;
 }
 /* Header */
 #header_content {
@@ -292,9 +308,19 @@ a {
     max-width: 95%;
     padding-top:10px;
 }
-.results_title {
+.results_title, .historic_results_title {
     color:#7A7777;
     margin-top:10px;
+    font-size: 18px;
+}
+#hist_info .results_value a {
+    font-size: 16px;
+}
+#hist_info .results_value {
+    padding-left: 10px;
+}
+.sub_title {
+    margin-left: -10px;
     font-size: 16px;
 }
 .nearby{
@@ -302,7 +328,16 @@ a {
 }
 .results>div {
     padding-top:10px;
-}	
+}
+.no_results_value {
+    font-weight: bold;
+    color: #00345b;
+    font-size: 16px;
+}
+.no_results_value a {
+    padding-left: 10px;
+    font-size: 13px;
+}
 .results_value {
     /*padding-left:10px;*/
     font-weight:bold;

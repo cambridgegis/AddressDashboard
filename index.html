@@ -18,6 +18,7 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.ba-bbq/1.2.1/jquery.ba-bbq.min.js"></script>
 	<script src='js/jsrender.js'></script>
 	<script src="js/proj4js-compressed.js"></script>
+	<script src="js/addressautocomplete.js"></script>
 	<script src="js/propsearch.js"></script>
 	<script>
 	$.views.helpers({
@@ -26,10 +27,10 @@
 		}
 	});
 	$.templates({
-		"historic_info_template": "<a target='_blank' href='{{>url}}'>{{>value}} {{>type}}</a><br/>",
-		"protected_info_template": "<a target='_blank' href='http://www2.cambridgema.gov/historic/index.html'>{{>value}} {{>type}}</a><br/>",
+	    "historic_url_template": "<a target='_blank' href='{{>url}}'>{{>historic_value}}<br/></a>",
+	    "historic_no_url_template": "<a target='_blank' href='http://www2.cambridgema.gov/historic/index.html'>{{>historic_value}}<br/></a>",
 		"census_info_template": "<a target='_blank' href='http://factfinder2.census.gov/bkmk/table/1.0/en/ACS/11_5YR/DP05/1400000US25017{{>value}}'>Demographic and Housing Estimates</a><br/>" +
-	                            "<a target='_blank' href='http://factfinder2.census.gov/bkmk/table/1.0/en/ACS/11_5YR/DP02/1400000US25017{{>value}}'>Socal Characteristics</a><br/>" +
+	                            "<a target='_blank' href='http://factfinder2.census.gov/bkmk/table/1.0/en/ACS/11_5YR/DP02/1400000US25017{{>value}}'>Social Characteristics</a><br/>" +
 	                            "<a target='_blank' href='http://factfinder2.census.gov/bkmk/table/1.0/en/ACS/11_5YR/DP03/1400000US25017{{>value}}'>Economic Characteristics</a><br/>" +
                                 "<a target='_blank' href='http://factfinder2.census.gov/bkmk/table/1.0/en/ACS/11_5YR/DP04/1400000US25017{{>value}}'>Housing Characteristics</a><br/>",
 		"nhood_info_template": "<a target='_blank' href='http://www.cambridgema.gov/CDD/planud/neighplan/neighs/{{>value}}'>{{>name}}</a><br/>",
@@ -48,7 +49,7 @@
 <body>
 	<div id="title_bar">
     	<div id="header_content">
-            <p id="city_link_box"><a href="http://cambridgema.gov" target="_blank">cambridgema.gov</a></p>    
+            <p id="city_link_box"><a href="http://www.cambridgema.gov/GIS.aspx" target="_blank">Cambridge GIS Home Page</a></p>    
             <div id="logo_box">
                 <a id="GIS_logo" href="http://gis.cambridgema.gov/mycambridge"><img src="images/GIS_logo.gif"/></a>
                 <h1><span id="cursive_my">my</span>Cambridge</h1>
@@ -70,18 +71,34 @@
 		searching...
 	</div>
 	<div class="col-group c">
-        <div id= "welcome_text">Welcome to the City Of Cambridge Address Dashboard Tool: myCambridge. To get started, type your address in the box above and click on an address from the drop down list. If you have any questions or concerns, please contact us at <a href="http://www.cambridgema.gov/GIS/contactus.aspx" target="_blank" style="color:#7493b3">Cambridge GIS</a>.
+        <div id= "welcome_text">
+            <!--<h1>Welcome to the City Of Cambridge <br>
+                Address Dashboard Tool: <br>
+                <span id="cursive_my">my</span>
+                <span style="color:#1c6f09;">Cambridge</span>. 
+            </h1><br />-->
+            <span id= "discover_text">See what you can discover about your Cambridge Address!</span> 
+            <ul>
+                <li>Get the facts on your street sweeping and trash collection days </li>
+                <li>Discover your neighborhood with links from our Community Development Department</li>
+                <li>Get connected to the Property Database to find out your property value and discover when your home was built</li>
+                <li>Learn about your Elected Officials and get links to census data</li> 
+                <!--<li>Find out if your home or business is located within one of the Cambridge Historical Districts</li>-->
+                <li>and more!!</li>
+            </ul>
+            <p id ="getting_started">Getting started is easy! Just type your address in the search box above! </p>
+            <p>If you have any questions or concerns, please contact us at <a href="http://www.cambridgema.gov/GIS/contactus.aspx" target="_blank" style="color:#7493b3">Cambridge GIS</a>.</p>
         </div>
 		<div class="main" id="col1">
 			<div class="results">
 				<div class="results_group_name">ADDRESS INFORMATION</div>
                     <div id="addr_db">
-					    <div class="results_title">Addresses from Address Database</div>
+					    <div class="results_title">From Address Database</div>
 					    <div class="results_value"></div>
 				    </div>
 				
 				    <div id="addr_assessing">
-					<div class="results_title">Addresses from Assessing Records</div>
+					<div class="results_title">From Assessing Records</div>
 					<div class="results_value"></div>
 					<div class="results_link"></div>
 					<div style="display:none">
@@ -106,8 +123,9 @@
 			   
 			   
 				<div id="hist_info">
-					<div class="results_title">Historic Info</div>
-					<div class="results_value"></div>
+					<div class="historic_results_title">Historic Info</div>
+                    <div class="results_value"></div>
+					<div class="no_results_value"></div>
 				</div>
 			   
 				<div id="trash_day">

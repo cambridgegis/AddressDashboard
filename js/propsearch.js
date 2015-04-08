@@ -38,22 +38,7 @@ CAMBRIDGEMA.config = {
 	"queryBaseURL" : "http://gis.cambridgema.gov/ArcGIS/rest/services/AddressDashboard/",
 	"initialSearchId" : "0"
 }
-CAMBRIDGEMA.generateSearchTree = function(aItems) {
-	if (aItems.length == 2) {
-		return [ [ aItems[0], aItems[1] ], [ aItems[1], aItems[0] ] ];
-	}
-	var searchTree = [];
-	for (var i = 0; i < aItems.length; i++) {
-		var item = aItems[i];
-		var remaining = aItems.slice(0);
-		remaining.splice(i,1);
-		var subTree = CAMBRIDGEMA.generateSearchTree(remaining);
-		for (var j = 0; j < subTree.length; j++) {
-			searchTree.push( [item].concat(subTree[j]) );
-		}
-	}
-	return searchTree;
-}
+
 CAMBRIDGEMA.execSimpleQuery = function(cfg) {
 
 	var data = {
@@ -128,74 +113,9 @@ jQuery(document).ready(function () {
 		});
 	}
 
-	$('.search_container_autocomplete')
-		.autocomplete({
-		"autoFocus" : true,
-		"minLength" : 2,
-		"open": function(event, ui) {
-			$(this).autocomplete("widget").addClass("complete-list");
-		},
-		"source" : function (request,response) {
-			var data = {
-				"outFields" : "*",
-				"f" : "pjson"
-			};
-		
-			if (request.term.indexOf(" ") !== -1) {
-				var aTerms = request.term.split(" ");
-				var aSearchTree = CAMBRIDGEMA.generateSearchTree(aTerms);
-				var aQueries = [];
-				for (var i = 0; i < aSearchTree.length; i++) {
-					aQueries.push("( Search_Addr like '%" + aSearchTree[i].join("%") + "%')");
-				}
-				data.where = aQueries.join(" OR ");
-				//console.log(data.where);
-			} else {
-				data.where = "Search_Addr like '%"+request.term+"%'";
-			}
-		
-			jQuery.ajax({
-				"url": CAMBRIDGEMA.config.queryBaseURL + "MapServer/" +
-							CAMBRIDGEMA.config.initialSearchId+ "/query",
-				"dataType":"jsonp",
-				"data" : data,
-				"success" :function (data) {
-					data.features.sort(function(obj1, obj2) {
-						if (obj1.attributes.StName.toUpperCase() == obj2.attributes.StName.toUpperCase()) {
-							return parseInt(obj1.attributes.StNm) - parseInt(obj2.attributes.StNm);
-						} else {
-							return (obj1.attributes.StName.toUpperCase() > obj2.attributes.StName.toUpperCase() ? 1 : -1);
-						}
-					});
-					response ( $.map (data.features, function (item) {
-						return {
-							label: item.attributes.Full_Addr,
-							value: item.attributes.Full_Addr,
-							data: item
-						};
-					}));
-				
-				}
-			});
-		
-		},select : function (event, ui) {
-			//console.log(ui, ui.item, event, this);
-			var data = ui.item.data;
-			// start our assorted requests
-			//console.log(data);
-			
-
-			//CAMBRIDGEMA.resultCache = {};
-			CAMBRIDGEMA.drawResult(data);
-		}
-
-	}).data( "autocomplete" )._renderItem = function( ul, item ) {
-		return $( "<li></li>" )
-			.css({"font-size":"12px"})
-			.data( "item.autocomplete", item )
-			.append( "<a>"+ item.label + "</a>" ) //  + + "<br>" + item.desc + "</a>"
-			.appendTo( ul );
-	};
+	addressAutocomplete('.search_container_autocomplete', 
+                        CAMBRIDGEMA.config.queryBaseURL + "MapServer/" + CAMBRIDGEMA.config.initialSearchId + "/query", 
+						CAMBRIDGEMA.drawResult);
 
 	$('#permalink_image').on("click",function() {
 		$( '#permalink_txt' ).val(document.location.href);
@@ -274,6 +194,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 				"resourceId" : 15,
 				"query" : "GIS_ID = '" + results.attributes.ml + "'",
 				"success" : function(results) {
+					$('#addr_assessing .results_value').html("Map-Lot: " + results.features[0].attributes.GIS_ID + "<br/>");
 					if (results.features.length === 0) {
 						$('#addr_assessing .results_value').html("No addresses records in Assessing DB");
 						return;
@@ -282,7 +203,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 					$.each(results.features, function(idx, feature) {	
 							addrs.push(toTitleCase(feature.attributes.address));
 					});
-					$('#addr_assessing .results_value').html(addrs.join("<br/>"));
+					$('#addr_assessing .results_value').append(addrs.join("<br/>"));
 
 					var res = [];
 					if ($.render.assess_info_template) {
@@ -375,25 +296,31 @@ CAMBRIDGEMA.dashboardPlugins = {
 	},
 	"historic_info" : {
 		render: function(results) {
-			var res = [];
 			var queries = [];
-			$('#hist_info .results_value').html('');
+			$('#hist_info .results_value, #hist_info .no_results_value').html('');
+
 			queries.push(CAMBRIDGEMA.execPointQuery({
 				"resourceId" : 5,
 				"x" : results.geometry.x,
 				"y" : results.geometry.y,
 				"success" : function(results) {
-					if (results.features.length === 0) {
-						//$('#hist_info .results_value').html("No Historic District Found");
+				    var res = [];
+				    if (results.features.length === 0) {
+						//$('#hist_info .no_results_value').html("No Historic District Found");
 						return;
 					}
-					$.each(results.features, function(idx, feature) {	
-						res.push({ "value" : feature.attributes.NAME, "type" : "(Historic District)"});
+					$('#hist_info .results_value').append('<span class="sub_title">Local Historic District<br/></span>');
+					$.each(results.features, function (idx, feature) {
+					    if (feature.attributes.NAME === 'Old Cambridge') {
+					        res.push({ "historic_value": feature.attributes.NAME, "historic_type": "", "url": "http://www2.cambridgema.gov/historic/oldcambridgehome.html" });
+					    } else {
+					        res.push({ "historic_value": feature.attributes.NAME, "historic_type": "", "url": "http://www2.cambridgema.gov/historic/fortwashingtonhome.html" });
+					    }
 					});
-					if (!$.render.historic_info_template) {
-						$('#hist_info .results_value').append(res.join("<br/>"));
+					if (!$.render.historic_url_template) {
+					    $('#hist_info .results_value').append(res.join("<br/>"));
 					} else {
-						$('#hist_info .results_value').append($.render.historic_info_template( res ));
+					    $('#hist_info .results_value').append($.render.historic_url_template(res));
 					}
 				}
 			}));
@@ -403,21 +330,23 @@ CAMBRIDGEMA.dashboardPlugins = {
 				"x" : results.geometry.x,
 				"y" : results.geometry.y,
 				"success" : function(results) {
-					if (results.features.length === 0) {
-						//$('#hist_info .results_value').html("No Conservation District Found");
+				    var res = [];
+				    if (results.features.length === 0) {
+						//$('#hist_info .no_results_value').html("No Conservation District Found");
 						return;
 					}
+				    $('#hist_info .results_value').append('<span class="sub_title">Neighborhood Conservation District<br/></span>');
 					$.each(results.features, function(idx, feature) {
 							if (feature.attributes.NAME === 'Hf Crown-Marsh' ) {
-								res.push({ "value" : feature.attributes.NAME, "type" : "(Conservation District)", "url" : "http://www2.cambridgema.gov/historic/halfcrown_marsh_home.html"});
+							    res.push({ "historic_value": feature.attributes.NAME, "historic_type": "Conservation District", "url": "http://www2.cambridgema.gov/historic/halfcrown_marsh_home.html" });
 							} else {
-								res.push({ "value" : feature.attributes.NAME, "type" : "(Conservation District)", "url" : "http://www2.cambridgema.gov/historic/" + feature.attributes.NAME.toLowerCase().replace(/ /g,'') + "home.html"});
+							    res.push({ "historic_value": feature.attributes.NAME, "historic_type": "Conservation District", "url": "http://www2.cambridgema.gov/historic/" + feature.attributes.NAME.toLowerCase().replace(/ /g, '') + "home.html" });
 							}
 					});
-					if (!$.render.historic_info_template) {
-						$('#hist_info .results_value').append(res.join("<br/>"));
+					if (!$.render.historic_url_template) {
+					    $('#hist_info .results_value').append(res.join("<br/>"));
 					} else {
-						$('#hist_info .results_value').append($.render.historic_info_template( res ));
+					    $('#hist_info .results_value').append($.render.historic_url_template(res));
 					}
 				}
 			}));
@@ -427,29 +356,54 @@ CAMBRIDGEMA.dashboardPlugins = {
 				"x" : results.geometry.x,
 				"y" : results.geometry.y,
 				"success" : function(results) {
-					if (results.features.length === 0) {
-						//$('#hist_info .results_value').html("No Protected Property Found");
+				    var res = [];
+				    if (results.features.length === 0) {
+					    //$('#hist_info .no_results_value').html("No Protected Property Found");
 						return;
 					}
+				    $('#hist_info .results_value').append('<span class="sub_title">Protected Property<br/></span>');
 					$.each(results.features, function(idx, feature) {	
-						res.push({ "value" : feature.attributes.HISTORIC_N, "type" : "(Protected Property)"});
+					    res.push({ "historic_value": feature.attributes.HISTORIC_N, "historic_type": "Protected Property" });
 					});
-					if (!$.render.protected_info_template) {
-						$('#hist_info .results_value').append(res.join("<br/>"));
+					if (!$.render.historic_no_url_template) {
+					    $('#hist_info .results_value').append(res.join("<br/>"));
 					} else {
-						$('#hist_info .results_value').append($.render.protected_info_template( res ));
+					    $('#hist_info .results_value').append($.render.historic_no_url_template(res));
 					}
 				}
 			}));
 
+			queries.push(CAMBRIDGEMA.execPointQuery({
+			    "resourceId": 2,
+			    "x": results.geometry.x,
+			    "y": results.geometry.y,
+			    "success": function (results) {
+			        var res = [];
+			        if (results.features.length === 0) {
+			            //$('#hist_info .no_results_value').html("No National Historic District Found");
+			            return;
+			        }
+			        $('#hist_info .results_value').append('<span class="sub_title">National Register<br/></span>');
+			        $.each(results.features, function (idx, feature) {
+			            res.push({ "historic_value": feature.attributes.LabelName, "historic_type": "National Historic District" });
+			        });
+			        if (!$.render.historic_no_url_template) {
+			            $('#hist_info .results_value').append(res.join("<br/>"));
+			        } else {
+			            $('#hist_info .results_value').append($.render.historic_no_url_template(res));
+			        }
+			    }
+			}));
+
 			var def = $.Deferred();
-			$.when.apply(this,queries).then(function (q1, q2, q3) {
+			$.when.apply(this,queries).then(function (q1, q2, q3, q4) {
 				if ((!q1[0] || !q1[0].features || q1[0].features.length === 0) &&
 					(!q2[0] || !q2[0].features || q2[0].features.length === 0) &&
-					(!q3[0] || !q3[0].features || q3[0].features.length === 0))
+                    (!q3[0] || !q3[0].features || q3[0].features.length === 0) &&
+					(!q4[0] || !q4[0].features || q4[0].features.length === 0))
 				{
 					// no historic district results
-					$('#hist_info .results_value').html("This property is not in a Historic District");
+				    $('#hist_info .no_results_value').html("This is not a designated historic building. <br/>Buildings over 50 years old may be subject to demolition review <br/><a href='http://www2.cambridgema.gov/historic/contacts.html' target='_blank'>Contact the CHC for more information</a>");
 				}
 				def.resolve();
 			});
