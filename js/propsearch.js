@@ -194,11 +194,11 @@ CAMBRIDGEMA.dashboardPlugins = {
 				"resourceId" : 15,
 				"query" : "GIS_ID = '" + results.attributes.ml + "'",
 				"success" : function(results) {
-					$('#addr_assessing .results_value').html("Map-Lot: " + results.features[0].attributes.GIS_ID + "<br/>");
 					if (results.features.length === 0) {
 						$('#addr_assessing .results_value').html("No addresses records in Assessing DB");
 						return;
 					}
+					$('#addr_assessing .results_value').html("Map-Lot: " + results.features[0].attributes.GIS_ID + "<br/>");
 					var addrs = [];
 					$.each(results.features, function(idx, feature) {	
 							addrs.push(toTitleCase(feature.attributes.address));
