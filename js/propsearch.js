@@ -161,7 +161,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 				"outFields" : "address_id",
 				"success" : function(results) {
 					if (results.features.length === 0) {
-						$('#addr_db .results_value').html("No addresses records in MAF");
+						$('#addr_db .results_value').html("No address records in MAF");
 						return;
 					}
 					var aFeatureIds = [];
@@ -173,7 +173,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 						"query" : "address_id in ('" + aFeatureIds.join("','") + "')",
 						"success" : function(results) {
 							if (results.features.length === 0) {
-								$('#addr_db .results_value').html("No addresses records in MAF");
+								$('#addr_db .results_value').html("No address records in MAF");
 								return;
 							}
 							var addrs = [];
@@ -195,7 +195,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 				"query" : "GIS_ID = '" + results.attributes.ml + "'",
 				"success" : function(results) {
 					if (results.features.length === 0) {
-						$('#addr_assessing .results_value').html("No addresses records in Assessing DB");
+						$('#addr_assessing .results_value').html("No address records in Assessing DB");
 						return;
 					}
 					$('#addr_assessing .results_value').html("Map-Lot: " + results.features[0].attributes.GIS_ID + "<br/>");
