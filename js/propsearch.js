@@ -151,23 +151,26 @@ CAMBRIDGEMA.drawResult = function(data) {
 }
 
 CAMBRIDGEMA.dashboardPlugins = {
-
 	"addresses_from_dashboard_database" : {
 		render: function(results) {
 			var BldgID = results.attributes.BldgID;  // Store for later URL creation
+			var AddrID = results.attributes.address_id;
 			return CAMBRIDGEMA.execSimpleQuery({
 				"resourceId" : 13,
 				"query" : "BldgID = '" + results.attributes.BldgID + "'",
 				"outFields" : "address_id",
 				"success" : function(results) {
-					if (results.features.length === 0) {
-						$('#addr_db .results_value').html("No address records in MAF");
-						return;
-					}
 					var aFeatureIds = [];
-					$.each(results.features, function(idx, oFeature) {
-						aFeatureIds.push(oFeature.attributes.address_id);
-					});
+					if (results.features.length === 0) {
+						$('#building_addresses .results_value').html("Not a building address");
+						$('#building_addresses').css('display','none');
+
+						aFeatureIds.push(AddrID);
+					} else {
+						$.each(results.features, function(idx, oFeature) {
+							aFeatureIds.push(oFeature.attributes.address_id);
+						});
+					}
 					CAMBRIDGEMA.execSimpleQuery({
 						"resourceId" : 12,
 						"query" : "address_id in ('" + aFeatureIds.join("','") + "')",
@@ -177,11 +180,24 @@ CAMBRIDGEMA.dashboardPlugins = {
 								return;
 							}
 							var addrs = [];
+							var currentAddress = [];
 							$.each(results.features, function(idx, feature) {	
-								addrs.push(feature.attributes.address);
+								if (feature.attributes.address_id == AddrID) {
+									currentAddress = feature;
+								} else {
+									addrs.push(feature.attributes.address);
+								}
 							});
-							$('#addr_db .results_value').html(addrs.join("<br/>") + 
-															  "<br/><a href='http://gis.cambridgema.gov/map/viewer.aspx?action=select&proximity=0ft&application=address&targetlayer=Buildings&maptab=Address&targetIDs=" + BldgID + "' target='_blank'>CityViewer Address Map</a>");
+							if (addrs.length === 0) {
+								$('#building_addresses .results_value').html("None");
+								$('#building_addresses').css('display','none');
+							} else {
+								$('#building_addresses .results_value').html(addrs.join("<br/>"));
+								$('#building_addresses').css('display','block');
+							}
+							$('#addr_db .results_value').html(currentAddress.attributes.street_number + " " + currentAddress.attributes.street_short+ 
+													  "<br/><a href='http://gis.cambridgema.gov/map/viewer.aspx?application=address&scaleby=4&targetlayer=Addresses&targetparams=" + currentAddress.attributes.street_number + "," + currentAddress.attributes.street_short.replace(" ","+") + "' target='_blank'>CityViewer Address Map</a>");
+
 						}
 					});
 				}
