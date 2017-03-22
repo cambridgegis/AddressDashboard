@@ -10,8 +10,19 @@
     
 	<title>Cambridge MA Property Search</title>
 	
+
 	<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
     <link rel="stylesheet" type="text/css" href="css/mycambridge.css" />
+    <!-- For everything else -->
+	<link rel="shortcut icon" href="http://www.cambridgema.gov/Layouts/GIS/_resources/img/favicon.ico" />
+	<!-- For iPhone 4 --> 
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://www.cambridgema.gov/Layouts/GIS/_resources/img/apple-touch-icon-114x114.png" />
+	<!-- For iPad 1--> 
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://www.cambridgema.gov/Layouts/GIS/_resources/img/apple-touch-icon-72x72.png" />
+	<!-- For iPhone 3G, iPod Touch and Android --> 
+	<link rel="apple-touch-icon-precomposed" href="http://www.cambridgema.gov/Layouts/GIS/_resources/img/apple-touch-icon-precomposed.png" /> 
+	<!-- For Nokia --> 
+	<link rel="shortcut icon" href="http://www.cambridgema.gov/Layouts/GIS/_resources/img/favicon.png" /><meta name="PageID" content="{0A9CD387-6A06-4154-86C0-967948C087C8}" /></head>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-placeholder/2.0.7/jquery.placeholder.min.js"></script>
@@ -28,7 +39,7 @@
 	});
 	$.templates({
 	    "historic_url_template": "<a target='_blank' href='{{>url}}'>{{>historic_value}}<br/></a>",
-	    "historic_no_url_template": "<a target='_blank' href='http://www2.cambridgema.gov/historic/index.html'>{{>historic_value}}<br/></a>",
+	    "historic_no_url_template": "<a target='_blank' href='http://www.cambridgema.gov/historic'>{{>historic_value}}<br/></a>",
 		"census_info_template": "<a target='_blank' href='http://factfinder2.census.gov/bkmk/table/1.0/en/ACS/13_5YR/DP05/1400000US25017{{>value}}'>Demographic and Housing Estimates</a><br/>" +
 	                            "<a target='_blank' href='http://factfinder2.census.gov/bkmk/table/1.0/en/ACS/13_5YR/DP02/1400000US25017{{>value}}'>Social Characteristics</a><br/>" +
 	                            "<a target='_blank' href='http://factfinder2.census.gov/bkmk/table/1.0/en/ACS/13_5YR/DP03/1400000US25017{{>value}}'>Economic Characteristics</a><br/>" +
