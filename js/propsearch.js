@@ -73,9 +73,18 @@ CAMBRIDGEMA.execPointQuery = function(cfg) {
 	});
 };
 //CAMBRIDGEMA.resultCache = {};
+// Hardcoding these because spatialreference.org doesn't support SSL at this time (June 8, 2017)
+Proj4js.defs['EPSG:2249'] = '+proj=lcc +lat_1=42.68333333333333 +lat_2=41.71666666666667 +lat_0=41 +lon_0=-71.5 +x_0=200000.0001016002 +y_0=750000 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs'
+// EPSG:4326 is built in and doesn't require a call to http://spatialreference.org
+Proj4js.defs['EPSG:26986'] = '+proj=lcc +lat_1=42.68333333333333 +lat_2=41.71666666666667 +lat_0=41 +lon_0=-71.5 +x_0=200000 +y_0=750000 +ellps=GRS80 +datum=NAD83 +units=m +no_defs'
+Proj4js.defs['EPSG:2960'] = '+proj=utm +zone=19 +ellps=GRS80 +units=m +no_defs'
+// EPSG:2249 - NAD83 / Massachusetts Mainland (ftUS) 
 CAMBRIDGEMA.epsg2249 = new Proj4js.Proj('EPSG:2249');
+// EPSG:4326 - WGS 84
 CAMBRIDGEMA.epsg4326 = new Proj4js.Proj('EPSG:4326');
+// EPSG:26986 - NAD83 / Massachusetts Mainland
 CAMBRIDGEMA.epsg26986 = new Proj4js.Proj('EPSG:26986');
+// EPSG:2960 - NAD83(CSRS) / UTM zone 19N
 CAMBRIDGEMA.epsg2960 = new Proj4js.Proj('EPSG:2960');
 jQuery(document).ready(function () {
 	var permalink = $.bbq.getState("d");
