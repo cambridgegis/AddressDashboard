@@ -328,9 +328,9 @@ CAMBRIDGEMA.dashboardPlugins = {
 					$('#hist_info .results_value').append('<span class="sub_title">Local Historic District<br/></span>');
 					$.each(results.features, function (idx, feature) {
 					    if (feature.attributes.NAME === 'Old Cambridge') {
-					        res.push({ "historic_value": feature.attributes.NAME, "historic_type": "", "url": "http://www2.cambridgema.gov/historic/oldcambridgehome.html" });
+					        res.push({ "historic_value": feature.attributes.NAME, "historic_type": "", "url": "http://www.cambridgema.gov/historic/districtsHistoricProperties/oldcambridgehd" });
 					    } else {
-					        res.push({ "historic_value": feature.attributes.NAME, "historic_type": "", "url": "http://www2.cambridgema.gov/historic/fortwashingtonhome.html" });
+					        res.push({ "historic_value": feature.attributes.NAME, "historic_type": "", "url": "http://www.cambridgema.gov/historic/districtsHistoricProperties/fortwashingtonhc" });
 					    }
 					});
 					if (!$.render.historic_url_template) {
@@ -353,10 +353,14 @@ CAMBRIDGEMA.dashboardPlugins = {
 					}
 				    $('#hist_info .results_value').append('<span class="sub_title">Neighborhood Conservation District<br/></span>');
 					$.each(results.features, function(idx, feature) {
-							if (feature.attributes.NAME === 'Hf Crown-Marsh' ) {
-							    res.push({ "historic_value": feature.attributes.NAME, "historic_type": "Conservation District", "url": "http://www2.cambridgema.gov/historic/halfcrown_marsh_home.html" });
-							} else {
-							    res.push({ "historic_value": feature.attributes.NAME, "historic_type": "Conservation District", "url": "http://www2.cambridgema.gov/historic/" + feature.attributes.NAME.toLowerCase().replace(/ /g, '') + "home.html" });
+							if (feature.attributes.NAME === 'Half Crown-Marsh' ) {
+							    res.push({ "historic_value": feature.attributes.NAME, "historic_type": "Conservation District", "url": "http://www.cambridgema.gov/historic/districtsHistoricProperties/halfcrownmarshncd" });
+							} else if (feature.attributes.NAME === 'Avon Hill') {
+							    res.push({ "historic_value": feature.attributes.NAME, "historic_type": "Conservation District", "url": "http://www.cambridgema.gov/historic/districtsHistoricProperties/avonhillncd" });
+							} else if (feature.attributes.NAME === 'Mid Cambridge') {
+							    res.push({ "historic_value": feature.attributes.NAME, "historic_type": "Conservation District", "url": "http://www.cambridgema.gov/historic/districtsHistoricProperties/midcambridgencd" });
+							} else if (feature.attributes.NAME === 'Harvard Square') {
+							    res.push({ "historic_value": feature.attributes.NAME, "historic_type": "Conservation District", "url": "http://www.cambridgema.gov/historic/districtsHistoricProperties/harvardsquarencd" });
 							}
 					});
 					if (!$.render.historic_url_template) {
@@ -401,12 +405,12 @@ CAMBRIDGEMA.dashboardPlugins = {
 			        }
 			        $('#hist_info .results_value').append('<span class="sub_title">National Register<br/></span>');
 			        $.each(results.features, function (idx, feature) {
-			            res.push({ "historic_value": feature.attributes.LabelName, "historic_type": "National Historic District" });
+			            res.push({ "historic_value": feature.attributes.LabelName, "historic_type": "National Historic District", "url": "http://www.cambridgema.gov/historic/districtsHistoricProperties/nationalregister" });
 			        });
-			        if (!$.render.historic_no_url_template) {
+			        if (!$.render.historic_url_template) {
 			            $('#hist_info .results_value').append(res.join("<br/>"));
 			        } else {
-			            $('#hist_info .results_value').append($.render.historic_no_url_template(res));
+			            $('#hist_info .results_value').append($.render.historic_url_template(res));
 			        }
 			    }
 			}));
@@ -419,7 +423,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 					(!q4[0] || !q4[0].features || q4[0].features.length === 0))
 				{
 					// no historic district results
-				    $('#hist_info .no_results_value').html("This is not a designated historic building. <br/>Buildings over 50 years old may be subject to demolition review <br/><a href='http://www2.cambridgema.gov/historic/contacts.html' target='_blank'>Contact the CHC for more information</a>");
+				    $('#hist_info .no_results_value').html("This is not a designated historic building. <br/>Buildings over 50 years old may be subject to demolition review <br/><a href='http://www.cambridgema.gov/historic/contactforms/historicalcommission' target='_blank'>Contact the CHC for more information</a>");
 				}
 				def.resolve();
 			});
