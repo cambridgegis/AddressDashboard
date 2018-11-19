@@ -29,6 +29,8 @@ var nhoodLookup = {
 	'West Cambridge': '10'
 };
 
+var gmapApiKey = 'AIzaSyDBQGeuKVkFQ-SQFXgeJqfxaPQ-Nl-iETM';
+
 function toTitleCase(str)
 {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
@@ -298,11 +300,11 @@ CAMBRIDGEMA.dashboardPlugins = {
 			var latlon = Proj4js.transform(CAMBRIDGEMA.epsg2249, CAMBRIDGEMA.epsg4326, {x: results.geometry.x, y: results.geometry.y});
 			var utm = Proj4js.transform(CAMBRIDGEMA.epsg2249, CAMBRIDGEMA.epsg2960, {x: results.geometry.x, y: results.geometry.y});
 
-			$('#map img').attr('src','https://maps.googleapis.com/maps/api/staticmap?center=' + latlon.y + "," + latlon.x + '&zoom=16&size=350x250&maptype=roadmap&sensor=false&visual_refresh=true&markers=color:blue|' + results.attributes.Full_Addr + ',%20Cambridge,%20MA');
+			$('#map img').attr('src','https://maps.googleapis.com/maps/api/staticmap?center=' + latlon.y + "," + latlon.x + '&zoom=16&size=350x250&maptype=roadmap&sensor=false&visual_refresh=true&markers=color:blue|' + results.attributes.Full_Addr + ',%20Cambridge,%20MA&key=' + gmapApiKey);
 			$('#map a').
 				attr('href','https://maps.google.com/?q=' + results.attributes.Full_Addr + '%20Cambridge,%20MA')
 				.attr('target','_blank');
-			$('#streetview img').attr('src','https://maps.googleapis.com/maps/api/streetview?size=350x250&location=' + latlon.y + "," + latlon.x + '&sensor=false');
+			$('#streetview img').attr('src','https://maps.googleapis.com/maps/api/streetview?size=350x250&location=' + latlon.y + "," + latlon.x + '&sensor=false&key=' + gmapApiKey);
 
 			$('#sp_ft_coordinates .results_value').html(Math.round(results.geometry.x,0) + ",&nbsp; " + Math.round(results.geometry.y,0));
 
