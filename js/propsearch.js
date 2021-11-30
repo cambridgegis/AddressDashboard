@@ -184,7 +184,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 					}
 					CAMBRIDGEMA.execSimpleQuery({
 						"resourceId" : 12,
-						"query" : "address_id in ('" + aFeatureIds.join("','") + "')",
+						"query" : "address_id in (" + aFeatureIds.join("','") + ")",
 						"success" : function(results) {
 							if (results.features.length === 0) {
 								$('#addr_db .results_value').html("No address records in MAF");
@@ -245,7 +245,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 		render: function(results) {
 			return CAMBRIDGEMA.execSimpleQuery({
 				"resourceId" : 14,
-				"query" : "address_id = '" + results.attributes.address_id + "'",
+				"query" : "address_id = " + results.attributes.address_id,
 				"success" : function(results) {
 					if (results.features.length === 0) {
 						$('#poi .results_value').html("No Points of Interest Found");
@@ -266,7 +266,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 		render: function(results) {
 			return CAMBRIDGEMA.execSimpleQuery({
 				"resourceId" : 12,
-				"query" : "address_id = '" + results.attributes.address_id + "'",
+				"query" : "address_id = " + results.attributes.address_id,
 				"success" : function(results) {
 					var res = [];
 					if (results.features.length === 0) {
