@@ -37,7 +37,7 @@ function toTitleCase(str)
 }
 
 CAMBRIDGEMA.config = {
-	"queryBaseURL" : "https://gis.cambridgema.gov/ArcGIS/rest/services/AddressDashboard/",
+	"queryBaseURL" : "https://gisdev.cambridgema.gov/ArcGIS/rest/services/AddressDashboard/",
 	"initialSearchId" : "0"
 }
 
@@ -184,7 +184,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 					}
 					CAMBRIDGEMA.execSimpleQuery({
 						"resourceId" : 12,
-						"query" : "address_id in (" + aFeatureIds.join("','") + ")",
+						"query" : "address_id in (" + aFeatureIds.join(",") + ")",
 						"success" : function(results) {
 							if (results.features.length === 0) {
 								$('#addr_db .results_value').html("No address records in MAF");
