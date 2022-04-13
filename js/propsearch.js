@@ -14,9 +14,9 @@ var streetSweepLookup = {
 };
 
 var nhoodLookup = {
-	'Agassiz': '8',
 	'Area 2/MIT': '2',
-	'Area Four': '4',
+	'The Port': '4',
+	'Baldwin': '8',
 	'Cambridge Highlands': '12',
 	'Cambridgeport': '5',
 	'East Cambridge': '1',
