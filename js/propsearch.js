@@ -509,7 +509,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 						return;
 					}
 					$.each(results.features, function(idx, feature) {	
-						res.push({ "value" : results.features[0].attributes.TRACTCE10 });
+						res.push({ "value" : results.features[0].attributes.TRACTCE20 });
 					});
 					$('#census_info .results_value').html("Census Tract: " + res[0].value + "<br/>");
 
