@@ -37,7 +37,7 @@ function toTitleCase(str)
 }
 
 CAMBRIDGEMA.config = {
-	"queryBaseURL" : "https://gisdev.cambridgema.gov/ArcGIS/rest/services/AddressDashboard/",
+	"queryBaseURL" : "https://gis.cambridgema.gov/ArcGIS/rest/services/AddressDashboard/",
 	"initialSearchId" : "0"
 }
 
@@ -459,7 +459,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 			}));
 
 			queries.push(CAMBRIDGEMA.execPointQuery({
-				"resourceId" : 8,
+				"resourceId" : 18, // Change back to 8 after January 2023 Inaugurations & subsequent layer updates
 				"x" : results.geometry.x,
 				"y" : results.geometry.y,
 				"success" : function(results) {
@@ -468,7 +468,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 			}));
 
 			queries.push(CAMBRIDGEMA.execPointQuery({
-				"resourceId" : 9,
+				"resourceId" : 19, // Change back to 9 after January 2023 Inaugurations & subsequent layer updates
 				"x" : results.geometry.x,
 				"y" : results.geometry.y,
 				"success" : function(results) {
@@ -481,11 +481,52 @@ CAMBRIDGEMA.dashboardPlugins = {
 			}));
 
 			queries.push(CAMBRIDGEMA.execPointQuery({
-				"resourceId" : 10,
+				"resourceId" : 20, // Change back to 10 after January 2023 Inaugurations & subsequent layer updates
 				"x" : results.geometry.x,
 				"y" : results.geometry.y,
 				"success" : function(results) {
 					$('#elect_info #us_rep').html("US Rep: " + results.features[0].attributes.Congressman);
+				}
+			}));
+
+			var def = $.Deferred();
+			$.when.apply(this,queries).then(function () {
+				def.resolve();
+			});
+			return def;
+		}
+	},
+	"elect_info22" : {
+		render: function(results) {
+			var queries = [];
+			queries.push(CAMBRIDGEMA.execPointQuery({
+				"resourceId" : 8,
+				"x" : results.geometry.x,
+				"y" : results.geometry.y,
+				"success" : function(results) {
+					$('#elect_info22 #st_rep22').html("State Rep: " + results.features[0].attributes.Name);
+				}
+			}));
+
+			queries.push(CAMBRIDGEMA.execPointQuery({
+				"resourceId" : 9,
+				"x" : results.geometry.x,
+				"y" : results.geometry.y,
+				"success" : function(results) {
+					if (!results.features[0].attributes.Name) {
+						$('#elect_info22 #st_sen22').html("State Senate District: ");
+						return;
+					}
+					$('#elect_info22 #st_sen22').html("State Senator: " + results.features[0].attributes.Name);
+				}
+			}));
+
+			queries.push(CAMBRIDGEMA.execPointQuery({
+				"resourceId" : 10,
+				"x" : results.geometry.x,
+				"y" : results.geometry.y,
+				"success" : function(results) {
+					$('#elect_info22 #us_rep22').html("US Rep: " + results.features[0].attributes.NAME);
 				}
 			}));
 
