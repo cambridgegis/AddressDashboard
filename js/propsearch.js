@@ -451,7 +451,11 @@ CAMBRIDGEMA.dashboardPlugins = {
 				"success" : function(results) {
 					$('#elect_info #ward').html("Ward " + results.features[0].attributes.Ward + ", Precinct " + results.features[0].attributes.PrecinctSubPrecinct);
 					if (results.features[0].attributes.Location !== null && results.features[0].attributes.Location.trim() != '') {
-						$('#elect_info #vote').html("Voting Location: " + results.features[0].attributes.Location + " (" + results.features[0].attributes.Location_Note + ")");
+						voting_location = "Voting Location: " + results.features[0].attributes.Location;
+						if (results.features[0].attributes.Location_Note !== null && results.features[0].attributes.Location_Note.trim() != '') {
+							voting_location = voting_location + " (" + results.features[0].attributes.Location_Note + ")";
+						}
+						$('#elect_info #vote').html(voting_location);
 					} else {
 						$('#elect_info #vote').html("Voting Location: TBD - Notice will be mailed before September primary"); // + results.features[0].attributes.Location);
 					}
