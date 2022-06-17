@@ -338,16 +338,16 @@ a {
     padding-left: 10px;
     font-size: 13px;
 }
-.results_value {
+.results_value, .results_205Richdale {
     /*padding-left:10px;*/
     font-weight:bold;
     color:#00345b;
     font-size: 18px;
 }
-.results a, .results_value a, .results_link {
+.results a, .results_value a, .results_link .results_205Richdale a {
     color: #7493b3;
 }
-.results_value a, .results_link {
+.results_value a, .results_link .results_205Richdale a {
     font-weight:bold;
 }
 .results_link {
