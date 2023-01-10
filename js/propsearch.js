@@ -468,14 +468,15 @@ CAMBRIDGEMA.dashboardPlugins = {
 							}
 							$('#elect_info #vote').html(voting_location);
 						} else {
-							$('#elect_info #vote').html("Voting Location: TBD - Notice will be mailed before September primary"); // + results.features[0].attributes.Location);
+							// Just in case the Location and Location_Note aren't populated, fall back on the Address field
+							$('#elect_info #vote').html(results.features[0].attributes.Address);
 						}
 					}
 				}
 			}));
 
 			queries.push(CAMBRIDGEMA.execPointQuery({
-				"resourceId" : 18, // Change back to 8 after January 2023 Inaugurations & subsequent layer updates
+				"resourceId" : 8,
 				"x" : results.geometry.x,
 				"y" : results.geometry.y,
 				"success" : function(results) {
@@ -488,66 +489,6 @@ CAMBRIDGEMA.dashboardPlugins = {
 			}));
 
 			queries.push(CAMBRIDGEMA.execPointQuery({
-				"resourceId" : 19, // Change back to 9 after January 2023 Inaugurations & subsequent layer updates
-				"x" : results.geometry.x,
-				"y" : results.geometry.y,
-				"success" : function(results) {
-					// 205 Richdale Ave is split by a Census block and some units are in one district and some in another
-					// Residents of this address should contact the Election Commision for their exact info
-					if (address != '205 Richdale Ave') {
-						if (!results.features[0].attributes.SENATOR) {
-							$('#elect_info #st_sen').html("State Senator: ");
-							return;
-						}
-						$('#elect_info #st_sen').html("State Senator: " + results.features[0].attributes.SENATOR);
-					}
-				}
-			}));
-
-			queries.push(CAMBRIDGEMA.execPointQuery({
-				"resourceId" : 20, // Change back to 10 after January 2023 Inaugurations & subsequent layer updates
-				"x" : results.geometry.x,
-				"y" : results.geometry.y,
-				"success" : function(results) {
-					// 205 Richdale Ave is split by a Census block and some units are in one district and some in another
-					// Residents of this address should contact the Election Commision for their exact info
-					if (address != '205 Richdale Ave') {
-						$('#elect_info #us_rep').html("US Rep: " + results.features[0].attributes.Congressman);
-					}
-				}
-			}));
-
-			var def = $.Deferred();
-			$.when.apply(this,queries).then(function () {
-				def.resolve();
-			});
-			return def;
-		}
-	},
-	"elect_info22" : {
-		render: function(results) {
-			var address = results.attributes.Full_Addr;
-			var queries = [];
-			queries.push(CAMBRIDGEMA.execPointQuery({
-				"resourceId" : 8,
-				"x" : results.geometry.x,
-				"y" : results.geometry.y,
-				"success" : function(results) {
-					// 205 Richdale Ave is split by a Census block and some units are in one district and some in another
-					// Residents of this address should contact the Election Commision for their exact info
-					if (address == '205 Richdale Ave') {
-						$('#elect_info22 .results_value').hide();
-						$('#elect_info22 .results_205Richdale').html("Please contact the Election Commission: <a href='mailto:elections@cambridgema.gov'>elections@cambridgema.gov</a>");
-						$('#elect_info22 .results_205Richdale').show();
-					} else {
-						$('#elect_info22 .results_205Richdale').hide();
-						$('#elect_info22 #st_rep22').html("State Rep: " + results.features[0].attributes.Name);
-						$('#elect_info22 .results_value').show();
-					}
-				}
-			}));
-
-			queries.push(CAMBRIDGEMA.execPointQuery({
 				"resourceId" : 9,
 				"x" : results.geometry.x,
 				"y" : results.geometry.y,
@@ -555,11 +496,11 @@ CAMBRIDGEMA.dashboardPlugins = {
 					// 205 Richdale Ave is split by a Census block and some units are in one district and some in another
 					// Residents of this address should contact the Election Commision for their exact info
 					if (address != '205 Richdale Ave') {
-						if (!results.features[0].attributes.Name) {
-							$('#elect_info22 #st_sen22').html("State Senate District: ");
+						if (!results.features[0].attributes.Senator) {
+							$('#elect_info #st_sen').html("State Senator: ");
 							return;
 						}
-						$('#elect_info22 #st_sen22').html("State Senator: " + results.features[0].attributes.Name);
+						$('#elect_info #st_sen').html("State Senator: " + results.features[0].attributes.Senator);
 					}
 				}
 			}));
@@ -572,7 +513,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 					// 205 Richdale Ave is split by a Census block and some units are in one district and some in another
 					// Residents of this address should contact the Election Commision for their exact info
 					if (address != '205 Richdale Ave') {
-						$('#elect_info22 #us_rep22').html("US Rep: " + results.features[0].attributes.NAME);
+						$('#elect_info #us_rep').html("US Rep: " + results.features[0].attributes.CONGRESSPERSON);
 					}
 				}
 			}));
