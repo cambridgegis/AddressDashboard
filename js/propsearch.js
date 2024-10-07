@@ -207,7 +207,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 								$('#building_addresses').css('display','block');
 							}
 							$('#addr_db .results_value').html(currentAddress.attributes.street_number + " " + currentAddress.attributes.street_short+ 
-													  "<br/><a href='https://gis.cambridgema.gov/map/viewer.aspx?application=address&scaleby=4&targetlayer=Addresses&targetparams=" + currentAddress.attributes.street_number + "," + currentAddress.attributes.street_short.replace(" ","+") + "' target='_blank'>CityViewer Address Map</a>");
+													  "<br/><a href='https://next.axisgis.com/CambridgeMA/?CamaIdName=[ParcelNumber]&CamaIdValue=" + currentAddress.attributes.MapLot + "' target='_blank'>AxisGIS Interactive Web Map</a>");
 
 						}
 					});
