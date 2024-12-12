@@ -37,7 +37,7 @@ function toTitleCase(str)
 }
 
 CAMBRIDGEMA.config = {
-	"queryBaseURL" : "https://gis.cambridgema.gov/ArcGIS/rest/services/AddressDashboard/",
+	"queryBaseURL" : "https://gisdev.cambridgema.gov/ArcGIS/rest/services/AddressDashboard/",
 	"initialSearchId" : "0"
 }
 
