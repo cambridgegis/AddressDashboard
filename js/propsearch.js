@@ -483,7 +483,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 					// 205 Richdale Ave is split by a Census block and some units are in one district and some in another
 					// Residents of this address should contact the Election Commision for their exact info
 					if (address != '205 Richdale Ave') {
-						$('#elect_info #st_rep').html("State Rep: " + results.features[0].attributes.REP);
+						$('#elect_info #st_rep').html("State Rep: <a href=" + results.features[0].attributes.REP_URL + " target='_blank'>" + results.features[0].attributes.REP) + "</a>";
 					}
 				}
 			}));
@@ -500,7 +500,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 							$('#elect_info #st_sen').html("State Senator: ");
 							return;
 						}
-						$('#elect_info #st_sen').html("State Senator: " + results.features[0].attributes.Senator);
+						$('#elect_info #st_sen').html("State Senator: <a href=" + results.features[0].attributes.Senator_URL + " target='_blank'>" + results.features[0].attributes.Senator) + "</a>";
 					}
 				}
 			}));
@@ -513,7 +513,7 @@ CAMBRIDGEMA.dashboardPlugins = {
 					// 205 Richdale Ave is split by a Census block and some units are in one district and some in another
 					// Residents of this address should contact the Election Commision for their exact info
 					if (address != '205 Richdale Ave') {
-						$('#elect_info #us_rep').html("US Rep: " + results.features[0].attributes.CONGRESSPERSON);
+						$('#elect_info #us_rep').html("US Rep: <a href=" + results.features[0].attributes.CONGRESSPERSON_URL + " target='_blank'>" + results.features[0].attributes.CONGRESSPERSON) + "</a>";
 					}
 				}
 			}));
