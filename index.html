@@ -11,7 +11,7 @@
 	<title>Cambridge MA Property Search</title>
 	
 
-	<link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.14.2/themes/base/jquery-ui.css" />
     <link rel="stylesheet" type="text/css" href="css/mycambridge.css" />
     <!-- For everything else -->
 	<link rel="shortcut icon" href="https://www.cambridgema.gov/Layouts/GIS/_resources/img/favicon.ico" />
@@ -23,12 +23,10 @@
 	<link rel="apple-touch-icon-precomposed" href="https://www.cambridgema.gov/Layouts/GIS/_resources/img/apple-touch-icon-precomposed.png" /> 
 	<!-- For Nokia --> 
 	<link rel="shortcut icon" href="https://www.cambridgema.gov/Layouts/GIS/_resources/img/favicon.png" /><meta name="PageID" content="{0A9CD387-6A06-4154-86C0-967948C087C8}" /></head>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-placeholder/2.0.7/jquery.placeholder.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.ba-bbq/1.2.1/jquery.ba-bbq.min.js"></script>
+	<script src="https://code.jquery.com/jquery-4.0.0.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.14.2/jquery-ui.min.js"></script>
 	<script src='js/jsrender.js'></script>
-	<script src="js/proj4js-compressed.js"></script>
+	<script src="js/proj4.js"></script>
 	<script src="js/addressautocomplete.js"></script>
 	<script src="js/propsearch.js"></script>
 	<script>
@@ -47,12 +45,6 @@
 		"nhood_info_template": "<a target='_blank' href='https://www.cambridgema.gov/CDD/planud/neighplan/neighs/{{>value}}'>{{>name}}</a><br/>",
 	    "assess_info_template": "<a target='_blank' href='https://www.cambridgema.gov/assess/PropertyDatabase/{{>blocknum}}-{{>lotnum}}'>See more data</a><br/>"
 	});
-	$(document).ready(
-		function() {
-		    $('input, textarea').placeholder();
-		}
-
-	);
 	</script>
     <script type="text/javascript" src="//use.typekit.net/psd0ncs.js"></script>
 	<script type="text/javascript">try{Typekit.load();}catch(e){}</script>    

@@ -17,8 +17,7 @@ generateSearchTree = function(aItems) {
 
 addressAutocomplete = function(selector, queryURL, selectCallback) {
 	// selector must point to an <input> and jQuery UI must be loaded
-	$(selector)
-		.autocomplete({
+	var autocomplete = $(selector).autocomplete({
 		"autoFocus" : true,
 		"minLength" : 2,
 		"open": function(event, ui) {
@@ -76,12 +75,12 @@ addressAutocomplete = function(selector, queryURL, selectCallback) {
 			//CAMBRIDGEMA.resultCache = {};
 			selectCallback(data);
 		}
+	}).autocomplete("instance");
 
-	}).data( "autocomplete" )._renderItem = function( ul, item ) {
+	autocomplete._renderItem = function( ul, item ) {
 		return $( "<li></li>" )
 			.css({"font-size":"12px"})
-			.data( "item.autocomplete", item )
-			.append( "<a>"+ item.label + "</a>" ) //  + + "<br>" + item.desc + "</a>"
+			.append($( "<div></div>" ).text(item.label))
 			.appendTo( ul );
 	};
 
