@@ -37,9 +37,20 @@ function toTitleCase(str)
 }
 
 CAMBRIDGEMA.config = {
-	"queryBaseURL" : "https://gisdev.cambridgema.gov/ArcGIS/rest/services/AddressDashboard/",
+	"queryBaseURL" : "https://gis.cambridgema.gov/ArcGIS/rest/services/AddressDashboard/",
 	"initialSearchId" : "0"
 }
+
+CAMBRIDGEMA.permalink = {
+	getAddress: function() {
+		return new URLSearchParams(window.location.hash.slice(1)).get("d");
+	},
+	setAddress: function(address) {
+		var params = new URLSearchParams();
+		params.set("d", address);
+		window.location.hash = params.toString();
+	}
+};
 
 CAMBRIDGEMA.execSimpleQuery = function(cfg) {
 
@@ -52,7 +63,7 @@ CAMBRIDGEMA.execSimpleQuery = function(cfg) {
 		"url": CAMBRIDGEMA.config.queryBaseURL + "MapServer/" + cfg.resourceId + "/query",
 		"dataType":"jsonp",
 		"data" : data
-	}).success(function(results) {
+	}).done(function(results) {
 		//CAMBRIDGEMA.resultCache[cfg.resourceId] = results;
 		cfg.success(results);
 	});
@@ -70,26 +81,16 @@ CAMBRIDGEMA.execPointQuery = function(cfg) {
 		"url": CAMBRIDGEMA.config.queryBaseURL + "MapServer/" + cfg.resourceId + "/query",
 		"dataType":"jsonp",
 		"data" : data
-	}).success(function(results) {
+	}).done(function(results) {
 		cfg.success(results);
 	});
 };
 //CAMBRIDGEMA.resultCache = {};
-// Hardcoding these because spatialreference.org doesn't support SSL at this time (June 8, 2017)
-Proj4js.defs['EPSG:2249'] = '+proj=lcc +lat_1=42.68333333333333 +lat_2=41.71666666666667 +lat_0=41 +lon_0=-71.5 +x_0=200000.0001016002 +y_0=750000 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs'
-// EPSG:4326 is built in and doesn't require a call to http://spatialreference.org
-Proj4js.defs['EPSG:26986'] = '+proj=lcc +lat_1=42.68333333333333 +lat_2=41.71666666666667 +lat_0=41 +lon_0=-71.5 +x_0=200000 +y_0=750000 +ellps=GRS80 +datum=NAD83 +units=m +no_defs'
-Proj4js.defs['EPSG:2960'] = '+proj=utm +zone=19 +ellps=GRS80 +units=m +no_defs'
-// EPSG:2249 - NAD83 / Massachusetts Mainland (ftUS) 
-CAMBRIDGEMA.epsg2249 = new Proj4js.Proj('EPSG:2249');
-// EPSG:4326 - WGS 84
-CAMBRIDGEMA.epsg4326 = new Proj4js.Proj('EPSG:4326');
-// EPSG:26986 - NAD83 / Massachusetts Mainland
-CAMBRIDGEMA.epsg26986 = new Proj4js.Proj('EPSG:26986');
-// EPSG:2960 - NAD83(CSRS) / UTM zone 19N
-CAMBRIDGEMA.epsg2960 = new Proj4js.Proj('EPSG:2960');
+proj4.defs('EPSG:2249', '+proj=lcc +lat_1=42.68333333333333 +lat_2=41.71666666666667 +lat_0=41 +lon_0=-71.5 +x_0=200000.0001016002 +y_0=750000 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs');
+proj4.defs('EPSG:26986', '+proj=lcc +lat_1=42.68333333333333 +lat_2=41.71666666666667 +lat_0=41 +lon_0=-71.5 +x_0=200000 +y_0=750000 +ellps=GRS80 +datum=NAD83 +units=m +no_defs');
+proj4.defs('EPSG:2960', '+proj=utm +zone=19 +ellps=GRS80 +units=m +no_defs');
 jQuery(document).ready(function () {
-	var permalink = $.bbq.getState("d");
+	var permalink = CAMBRIDGEMA.permalink.getAddress();
 	if (permalink) {
 		var data = {
 			"outFields" : "*",
@@ -154,8 +155,7 @@ CAMBRIDGEMA.drawResult = function(data) {
 	$('#search_indicator').fadeIn(500);
 
 	$.when.apply(this,plugins).then(function () {
-		$.bbq.removeState();
-		$.bbq.pushState({"d":$('.search_container input').val()});
+		CAMBRIDGEMA.permalink.setAddress($('.search_container input').val());
 		$('#search_indicator').fadeOut(500);
 		$(".results").fadeIn(1000);
 	});
@@ -296,24 +296,25 @@ CAMBRIDGEMA.dashboardPlugins = {
 	},
 	"map" : {
 		render: function(results) {
-			var meters = Proj4js.transform(CAMBRIDGEMA.epsg2249, CAMBRIDGEMA.epsg26986, {x: results.geometry.x, y: results.geometry.y});
-			var latlon = Proj4js.transform(CAMBRIDGEMA.epsg2249, CAMBRIDGEMA.epsg4326, {x: results.geometry.x, y: results.geometry.y});
-			var utm = Proj4js.transform(CAMBRIDGEMA.epsg2249, CAMBRIDGEMA.epsg2960, {x: results.geometry.x, y: results.geometry.y});
+			var sourceCoordinates = [results.geometry.x, results.geometry.y];
+			var meters = proj4('EPSG:2249', 'EPSG:26986', sourceCoordinates);
+			var latlon = proj4('EPSG:2249', 'EPSG:4326', sourceCoordinates);
+			var utm = proj4('EPSG:2249', 'EPSG:2960', sourceCoordinates);
 
-			$('#map img').attr('src','https://maps.googleapis.com/maps/api/staticmap?center=' + latlon.y + "," + latlon.x + '&zoom=16&size=350x250&maptype=roadmap&sensor=false&visual_refresh=true&markers=color:blue|' + results.attributes.Full_Addr + ',%20Cambridge,%20MA&key=' + gmapApiKey);
+			$('#map img').attr('src','https://maps.googleapis.com/maps/api/staticmap?center=' + latlon[1] + "," + latlon[0] + '&zoom=16&size=350x250&maptype=roadmap&sensor=false&visual_refresh=true&markers=color:blue|' + results.attributes.Full_Addr + ',%20Cambridge,%20MA&key=' + gmapApiKey);
 			$('#map a').
 				attr('href','https://maps.google.com/?q=' + results.attributes.Full_Addr + '%20Cambridge,%20MA')
 				.attr('target','_blank');
-			$('#streetview img').attr('src','https://maps.googleapis.com/maps/api/streetview?size=350x250&location=' + latlon.y + "," + latlon.x + '&sensor=false&key=' + gmapApiKey);
+			$('#streetview img').attr('src','https://maps.googleapis.com/maps/api/streetview?size=350x250&location=' + latlon[1] + "," + latlon[0] + '&sensor=false&key=' + gmapApiKey);
 
 			$('#sp_ft_coordinates .results_value').html(Math.round(results.geometry.x,0) + ",&nbsp; " + Math.round(results.geometry.y,0));
 
-			$('#sp_m_coordinates .results_value').html(Math.round(meters.x) + ",&nbsp; " + Math.round(meters.y));
-			$('#latlon_coordinates .results_value').html(latlon.x.toFixed(5) + ",&nbsp; " + latlon.y.toFixed(5));
-			$('#utm_coordinates .results_value').html(Math.round(utm.x) + ",&nbsp; " + Math.round(utm.y));
+			$('#sp_m_coordinates .results_value').html(Math.round(meters[0]) + ",&nbsp; " + Math.round(meters[1]));
+			$('#latlon_coordinates .results_value').html(latlon[0].toFixed(5) + ",&nbsp; " + latlon[1].toFixed(5));
+			$('#utm_coordinates .results_value').html(Math.round(utm[0]) + ",&nbsp; " + Math.round(utm[1]));
 
 			$('#streetview a')
-				.attr('href','https://maps.google.com/maps?q=' + results.attributes.Full_Addr + '+Cambridge,+MA&layer=c&cbp=12,0,0,0,0&cbll=' + latlon.y + "," + latlon.x)
+				.attr('href','https://maps.google.com/maps?q=' + results.attributes.Full_Addr + '+Cambridge,+MA&layer=c&cbp=12,0,0,0,0&cbll=' + latlon[1] + "," + latlon[0])
 				.attr('target','_blank');
 
 			var def = $.Deferred();
